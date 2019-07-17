@@ -22,16 +22,18 @@ from .github_samples import extract_snippet
 
 
 class GithubSamplesTest(unittest.TestCase):
-  def test_github_samples_py(self):
+  def test_github_samples(self):
     actual = github_samples('\n'.join([
         '# Github samples',
-        '```py',
+        '```',
         '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
     expected = '\n'.join([
         '# Github samples',
+        '```',
         "print('Hello world!')",
+        '```',
     ])
     self.assertEqual(actual, expected)
 

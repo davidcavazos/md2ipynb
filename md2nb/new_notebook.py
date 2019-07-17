@@ -67,4 +67,4 @@ def new_notebook(
   if notebook_title:
     metadata['colab']['name'] = notebook_title
 
-  return nbformat.v4.new_notebook(cells, metadata=metadata)
+  return nbformat.v4.new_notebook(cells=cells, metadata=metadata)

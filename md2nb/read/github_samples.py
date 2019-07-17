@@ -31,14 +31,13 @@ GITHUB_SAMPLE_RE = re.compile(
 def github_samples(source):
   for m in GITHUB_SAMPLE_RE.finditer(source):
     owner, repo, branch, path, tag = m.groups()
-    url = 'https://api.github.com/repos/{}/{}/input_files/{}'.format(owner, repo, path)
+    url = 'https://api.github.com/repos/{}/{}/contents/{}'.format(owner, repo, path)
     req = requests.get(url, params={'ref': branch})
-    print(req)
     if req.status_code == requests.codes.ok:
       req = req.json()
-      source = base64.b64decode(req['input_file']).decode('utf-8')
-      source = extract_snippet(source, tag)
-      source = source.replace(m.group(0), source)
+      content = base64.b64decode(req['content']).decode('utf-8')
+      snippet = extract_snippet(content, tag)
+      source = source.replace(m.group(0), snippet, 1)
   return source.rstrip()
 
 
