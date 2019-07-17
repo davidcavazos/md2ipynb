@@ -31,12 +31,10 @@ GITHUB_SAMPLE_RE = re.compile(
 def github_samples(source):
   for m in GITHUB_SAMPLE_RE.finditer(source):
     owner, repo, branch, path, tag = m.groups()
-    url = 'https://api.github.com/repos/{}/{}/contents/{}'.format(owner, repo, path)
+    url = 'https://raw.githubusercontent.com/{}/{}/{}/{}'.format(owner, repo, branch, path)
     req = requests.get(url, params={'ref': branch})
     if req.status_code == requests.codes.ok:
-      req = req.json()
-      content = base64.b64decode(req['content']).decode('utf-8')
-      snippet = extract_snippet(content, tag)
+      snippet = extract_snippet(req.text, tag)
       source = source.replace(m.group(0), snippet, 1)
   return source.rstrip()
 
