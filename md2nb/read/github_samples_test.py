@@ -37,6 +37,53 @@ class GithubSamplesTest(unittest.TestCase):
     ])
     self.assertEqual(actual, expected)
 
+  def test_github_samples_py(self):
+    actual = github_samples('\n'.join([
+        '# Github samples - Python',
+        '```py',
+        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '```',
+    ]))
+    expected = '\n'.join([
+        '# Github samples - Python',
+        '```py',
+        "print('Hello world!')",
+        '```',
+    ])
+    self.assertEqual(actual, expected)
+
+  @unittest.skip('Languages other than Python are not implemented yet')
+  def test_github_samples_go(self):
+    actual = github_samples('\n'.join([
+        '# Github samples - Go',
+        '```go',
+        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.go tag:hello_world %}',
+        '```',
+    ]))
+    expected = '\n'.join([
+        '# Github samples - Go',
+        '```go',
+        '!mkdir -p examples/code',
+        '```',
+        '',
+        '```go',
+        '%%writefile examples/code/hello-world.go',
+        'package main',
+        '',
+        'import "fmt"',
+        '',
+        'func main() {',
+        '\tfmt.Println("Hello world!")',
+        '}',
+        '',
+        '```',
+        '',
+        '```go',
+        '!go run examples/code/hello-world.go',
+        '```',
+    ])
+    self.assertEqual(actual, expected)
+
 
 class ExtractSnippetTest(unittest.TestCase):
   def test_extract_snippet(self):
