@@ -1,0 +1,4 @@
+Jinja2
+html2md
+nbformat
+requests
