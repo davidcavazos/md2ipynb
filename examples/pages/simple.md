@@ -14,6 +14,8 @@ limitations under the License.
 
 # {{ name }}
 
+{% include 'examples/templates/header.md' %}
+
 Here's how to do a Hello World.
 
 {:.language-py}

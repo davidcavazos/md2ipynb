@@ -1,3 +1,0 @@
-sections: '{:.language-py}'
-imports:
-- templates/setup-py.md:0

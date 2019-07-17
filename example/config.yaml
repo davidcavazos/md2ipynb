@@ -1,8 +1,0 @@
-docs_logo: https://www.tensorflow.org/images/GitHub-Mark-32px.png
-imports:
-- templates/license.md:0
-- templates/cleanup.md:-1
-sections: '{:.shell-unix}'
-start_on_header: y
-variables:
-  site.branch_repo: davidcavazos/docs-nbgen/blob/master
