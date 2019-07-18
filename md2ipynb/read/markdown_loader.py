@@ -19,8 +19,6 @@ import html2md
 import jinja2
 import os
 
-from . import github_samples
-
 
 class MarkdownLoader(jinja2.BaseLoader):
   def __init__(self, searchpath='.'):
@@ -34,5 +32,4 @@ class MarkdownLoader(jinja2.BaseLoader):
     mtime = os.path.getmtime(path)
     with open(path) as f:
       source = html2md.convert(f.read())
-    source = github_samples(source)
     return source, path, lambda: mtime == os.path.getmtime(path)

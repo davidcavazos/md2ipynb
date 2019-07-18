@@ -125,7 +125,7 @@ def main(argv=None):
   )
 
   if args.output_file:
-    with open(args.output_file) as f:
+    with open(args.output_file, 'w') as f:
       nbformat.write(notebook, f)
   else:
     print(nbformat.writes(notebook))

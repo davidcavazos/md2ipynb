@@ -19,7 +19,7 @@ import fileinput
 import jinja2
 
 from . import MarkdownLoader
-from . import github_samples
+from . import GithubSampleExt
 
 
 def lines(input_file='-', variables=None, jinja_env=None):
@@ -31,10 +31,9 @@ def lines(input_file='-', variables=None, jinja_env=None):
     lines = [line.rstrip() for line in input_file]
 
   if not jinja_env:
-    jinja_env = jinja2.Environment(loader=MarkdownLoader())
+    jinja_env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
 
-  source = github_samples('\n'.join(lines))
-  input_template = jinja_env.from_string(source)
+  input_template = jinja_env.from_string('\n'.join(lines))
   source = input_template.render(variables or {})
   for line in source.splitlines():
     yield line.rstrip()
