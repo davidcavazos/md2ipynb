@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from md2nb import read
-from md2nb import steps
-from md2nb.apply import apply
-from md2nb.new_notebook import new_notebook
+from . import read
+from . import steps
+from .apply import apply
+from .new_notebook import new_notebook

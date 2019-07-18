@@ -17,7 +17,7 @@
 
 import unittest
 
-from md2nb import read
+from md2ipynb import read
 
 from . import lang
 

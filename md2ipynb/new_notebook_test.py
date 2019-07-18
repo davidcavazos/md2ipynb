@@ -22,13 +22,13 @@ from . import new_notebook
 
 variables = {
     'title': 'Hello world',
-    'name': 'md2nb',
+    'name': 'md2ipynb',
 }
 
 expected_source = '\n'.join([
     '# Hello world',
     '',
-    'Hello md2nb!',
+    'Hello md2ipynb!',
 ])
 
 def md_cell(source, id=''):
@@ -54,7 +54,7 @@ def nb_metadata(name):
 
 class NewNotebookTest(unittest.TestCase):
   def test_new_notebook_hello_world(self):
-    actual = new_notebook('examples/pages/hello-world.md', variables)
+    actual = new_notebook('test/variables.md', variables)
     expected = nbformat.v4.new_notebook(
         cells=[
             md_cell(expected_source, 'hello-world'),

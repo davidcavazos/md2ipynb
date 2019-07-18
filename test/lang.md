@@ -9,7 +9,7 @@ Any paragraph
 ```
 
 ```
-{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.sh tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.sh tag:hello_world %}
 ```
 
 ## Python
@@ -21,7 +21,7 @@ Any paragraph
 ```
 
 ```py
-{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}
 ```
 
 ## Go
@@ -33,7 +33,7 @@ Any paragraph
 ```
 
 ```go
-{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.go tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}
 ```
 
 ## Java
@@ -45,7 +45,7 @@ Any paragraph
 ```
 
 ```java
-{% github_sample /davidcavazos/md2nb/blob/master/examples/code/HelloWorld.java tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/HelloWorld.java tag:hello_world %}
 ```
 
 ## Javascript
@@ -57,5 +57,5 @@ Any paragraph
 ```
 
 ```js
-{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.js tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.js tag:hello_world %}
 ```

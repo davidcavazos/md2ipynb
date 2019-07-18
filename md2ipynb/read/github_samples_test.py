@@ -26,7 +26,7 @@ class GithubSamplesTest(unittest.TestCase):
     actual = github_samples('\n'.join([
         '# Github samples',
         '```',
-        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
     expected = '\n'.join([
@@ -41,7 +41,7 @@ class GithubSamplesTest(unittest.TestCase):
     actual = github_samples('\n'.join([
         '# Github samples - Python',
         '```py',
-        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
     expected = '\n'.join([
@@ -57,7 +57,7 @@ class GithubSamplesTest(unittest.TestCase):
     actual = github_samples('\n'.join([
         '# Github samples - Go',
         '```go',
-        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.go tag:hello_world %}',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}',
         '```',
     ]))
     expected = '\n'.join([

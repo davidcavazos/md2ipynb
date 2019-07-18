@@ -16,30 +16,39 @@
 # under the License.
 
 import jinja2
+import unittest
 
-from md2nb import read
+from io import StringIO
+from unittest.mock import patch
+
+from . import lines
+
+source_file = 'test/variables.md'
+with open(source_file) as f:
+  source = f.read()
+
+variables = {
+    'title': 'Read lines',
+    'name': 'md2ipynb',
+}
+
+expected = [
+    '# Read lines',
+    '',
+    'Hello md2ipynb!',
+]
 
 
-def imports(sections, imports=None, variables=None, jinja_env=None):
-  sections = list(sections)
-  if imports is None:
-    imports = {}
+class ReadLinesTest(unittest.TestCase):
+  def test_from_iterable(self):
+    actual = list(lines(source.splitlines(), variables))
+    self.assertEqual(actual, expected)
 
-  # Normalize imports to the form: `non_negative_index: [file1, file2, ...]`
-  for index, input_file in imports.items():
-    if index < 0:
-      imports[len(sections)+index+1] = input_file
-      del imports[index]
+  def test_from_file(self):
+    actual = list(lines(source_file, variables))
+    self.assertEqual(actual, expected)
 
-  for i, section in enumerate(sections):
-    if i in imports:
-      for input_file in imports[i]:
-        for import_section in read.sections(input_file, variables, jinja_env):
-          yield import_section
-    yield section
-
-  i = len(sections)
-  if i in imports:
-    for input_file in imports[i]:
-      for import_section in read.sections(input_file, variables, jinja_env):
-        yield import_section
+  @patch("sys.stdin", StringIO(source))
+  def test_from_stdin(self):
+    actual = list(lines(variables=variables))
+    self.assertEqual(actual, expected)

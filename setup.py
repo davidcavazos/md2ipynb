@@ -24,21 +24,21 @@ with open('requirements.txt') as f:
   requirements = f.read().splitlines()
 
 setuptools.setup(
-    name="md2nb",
+    name="md2ipynb",
     version="0.1.0",
     author="David Cavazos",
     author_email="dcavazosw@gmail.com",
     description="Markdown to Jupyter Notebook converter.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/davidcavazos/md2nb",
+    url="https://github.com/davidcavazos/md2ipynb",
     packages=setuptools.find_packages(),
     install_requires=requirements,
     test_suite='nose.collector',
     tests_require=['nose'],
     entry_points={
         'console_scripts': [
-            'md2nb = md2nb.__main__:main'
+            'md2ipynb = md2ipynb.__main__:main'
         ],
     },
     classifiers=[
