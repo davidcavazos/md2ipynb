@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .github_samples import github_samples
+from .github_sample import GithubSampleExt
 from .markdown_loader import MarkdownLoader
 
 from .lines import lines

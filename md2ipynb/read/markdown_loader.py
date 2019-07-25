@@ -15,31 +15,21 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import html2md
 import jinja2
+import os
 
-from md2nb import read
 
+class MarkdownLoader(jinja2.BaseLoader):
+  def __init__(self, searchpath='.'):
+    self.searchpath = searchpath
 
-def imports(sections, imports=None, variables=None, jinja_env=None):
-  sections = list(sections)
-  if imports is None:
-    imports = {}
+  def get_source(self, env, name):
+    path = os.path.join(self.searchpath, name)
+    if not os.path.exists(path):
+      raise jinja2.TemplateNotFound(path)
 
-  # Normalize imports to the form: `non_negative_index: [file1, file2, ...]`
-  for index, input_file in imports.items():
-    if index < 0:
-      imports[len(sections)+index+1] = input_file
-      del imports[index]
-
-  for i, section in enumerate(sections):
-    if i in imports:
-      for input_file in imports[i]:
-        for import_section in read.sections(input_file, variables, jinja_env):
-          yield import_section
-    yield section
-
-  i = len(sections)
-  if i in imports:
-    for input_file in imports[i]:
-      for import_section in read.sections(input_file, variables, jinja_env):
-        yield import_section
+    mtime = os.path.getmtime(path)
+    with open(path) as f:
+      source = html2md.convert(f.read())
+    return source, path, lambda: mtime == os.path.getmtime(path)

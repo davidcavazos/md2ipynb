@@ -16,7 +16,7 @@
 # under the License.
 
 import jinja2
-import md2nb
+import md2ipynb
 import nbformat
 
 DEFAULT_KERNEL = 'python3'
@@ -37,17 +37,17 @@ def new_notebook(
     jinja_env=None,
 ):
 
-  sections = md2nb.read.sections(input_file, variables, jinja_env)
-  paragraphs = md2nb.apply(sections, [
-      (md2nb.steps.imports, imports, variables, jinja_env),
-      md2nb.steps.flatten,
-      (md2nb.steps.lang, lang, lang_shell)
+  sections = md2ipynb.read.sections(input_file, variables, jinja_env)
+  paragraphs = md2ipynb.apply(sections, [
+      (md2ipynb.steps.imports, imports, variables, jinja_env),
+      md2ipynb.steps.flatten,
+      (md2ipynb.steps.lang, lang, lang_shell)
   ])
-  paragraphs = md2nb.apply(paragraphs, steps)
-  cells = list(md2nb.apply(paragraphs, [
-      md2nb.steps.paragraphs_to_cells,
-      (md2nb.steps.view_the_docs, docs_url, docs_logo_url),
-      (md2nb.steps.open_in_colab, github_ipynb_url),
+  paragraphs = md2ipynb.apply(paragraphs, steps)
+  cells = list(md2ipynb.apply(paragraphs, [
+      md2ipynb.steps.paragraphs_to_cells,
+      (md2ipynb.steps.view_the_docs, docs_url, docs_logo_url),
+      (md2ipynb.steps.open_in_colab, github_ipynb_url),
   ]))
 
   for cell in cells:

@@ -27,29 +27,29 @@ All this will be translated into a Jupyter notebook using the desired language.
 Here is a code sample:
 
 ```py
-{% github_sample {{ site.branch_repo }}/example/snippets/hello-world.py tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}
 ```
 
 ```java
-{% github_sample {{ site.branch_repo }}/example/snippets/HelloWorld.java tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/HelloWorld.java tag:hello_world %}
 ```
 
 ```go
-{% github_sample {{ site.branch_repo }}/example/snippets/hello_world/hello_world.go tag:hello_world %}
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}
 ```
 
 {:.language-py}
 <table align="left">
   <td>
     <a target="_blank" class="button"
-        href="https://colab.research.google.com/github/{{ site.branch_repo }}/example/notebooks/hello-world-py.ipynb">
+        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-py.ipynb">
       <img src="https://www.tensorflow.org/images/colab_logo_32px.png" width="20px" height="20px" />
       Run in Colab
     </a>
   </td>
   <td style="padding-left:1em">
     <a target="_blank" class="button"
-        href="https://github.com/{{ site.branch_repo }}/example/snippets/hello-world.py">
+        href="https://github.com//davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py">
       <img src="https://www.tensorflow.org/images/GitHub-Mark-32px.png" width="20px" height="20px" />
       View on GitHub
     </a>
@@ -60,14 +60,14 @@ Here is a code sample:
 <table align="left">
   <td>
     <a target="_blank" class="button"
-        href="https://colab.research.google.com/github/{{ site.branch_repo }}/example/notebooks/hello-world-java.ipynb">
+        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-java.ipynb">
       <img src="https://www.tensorflow.org/images/colab_logo_32px.png" width="20px" height="20px" />
       Run in Colab
     </a>
   </td>
   <td style="padding-left:1em">
     <a target="_blank" class="button"
-        href="https://github.com/{{ site.branch_repo }}/example/snippets/HelloWorld.java">
+        href="https://github.com//davidcavazos/md2ipynb/blob/master/examples/code/HelloWorld.java">
       <img src="https://www.tensorflow.org/images/GitHub-Mark-32px.png" width="20px" height="20px" />
       View on GitHub
     </a>
@@ -78,14 +78,14 @@ Here is a code sample:
 <table align="left">
   <td>
     <a target="_blank" class="button"
-        href="https://colab.research.google.com/github/{{ site.branch_repo }}/example/notebooks/hello-world-go.ipynb">
+        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-go.ipynb">
       <img src="https://www.tensorflow.org/images/colab_logo_32px.png" width="20px" height="20px" />
       Run in Colab
     </a>
   </td>
   <td style="padding-left:1em">
     <a target="_blank" class="button"
-        href="https://github.com/{{ site.branch_repo }}/example/snippets/hello_world/hello_world.go">
+        href="https://github.com//davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go">
       <img src="https://www.tensorflow.org/images/GitHub-Mark-32px.png" width="20px" height="20px" />
       View on GitHub
     </a>
@@ -100,4 +100,4 @@ You are all done!
 
 ## What's next
 
-Check the [README.md](https://github.com/{{ site.branch_repo }}/README.md) for more instructions.
+Check the [README.md](https://github.com//davidcavazos/md2ipynb/blob/master/README.md) for more instructions.

@@ -22,39 +22,36 @@ from unittest.mock import patch
 
 from . import MarkdownLoader
 
-with open('examples/pages/hello-world.md') as f:
+source_file = 'test/variables.md'
+with open(source_file) as f:
   source = f.read()
 
 variables = {
-    'title': 'Hello world',
-    'name': 'md2nb',
+    'title': 'MarkdownLoader',
+    'name': 'md2ipynb',
 }
 
 expected = '''\
-# Hello world
+# MarkdownLoader
 
-Hello md2nb!'''
+Hello md2ipynb!'''
 
 
 class MarkdownLoaderTest(unittest.TestCase):
   def test_from_file(self):
     env = jinja2.Environment(loader=MarkdownLoader())
-    template = env.get_template('examples/pages/hello-world.md')
+    template = env.get_template(source_file)
     self.assertEqual(template.render(variables), expected)
 
   def test_from_string(self):
     env = jinja2.Environment(loader=MarkdownLoader())
-    template = env.from_string('\n'.join([
-        '# {{ title }}',
-        '',
-        'Hello {{name}}!',
-    ]))
+    template = env.from_string(source)
     self.assertEqual(template.render(variables), expected)
 
   def test_include(self):
     env = jinja2.Environment(loader=MarkdownLoader())
     template = env.from_string('\n'.join([
-        "{% include 'examples/templates/title.md' %}",
+        "{% include 'test/title.md' %}",
         '',
         'Hello {{name}}!',
     ]))

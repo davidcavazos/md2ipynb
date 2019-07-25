@@ -15,24 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import html2md
-import jinja2
-import os
-
-from . import github_samples
-
-
-class MarkdownLoader(jinja2.BaseLoader):
-  def __init__(self, searchpath='.'):
-    self.searchpath = searchpath
-
-  def get_source(self, env, name):
-    path = os.path.join(self.searchpath, name)
-    if not os.path.exists(path):
-      raise jinja2.TemplateNotFound(path)
-
-    mtime = os.path.getmtime(path)
-    with open(path) as f:
-      source = html2md.convert(f.read())
-    source = github_samples(source)
-    return source, path, lambda: mtime == os.path.getmtime(path)
+from . import read
+from . import steps
+from .apply import apply
+from .new_notebook import new_notebook

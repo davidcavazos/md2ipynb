@@ -15,7 +15,40 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from md2nb import read
-from md2nb import steps
-from md2nb.apply import apply
-from md2nb.new_notebook import new_notebook
+import jinja2
+import unittest
+
+from io import StringIO
+from unittest.mock import patch
+
+from . import lines
+
+source_file = 'test/variables.md'
+with open(source_file) as f:
+  source = f.read()
+
+variables = {
+    'title': 'Read lines',
+    'name': 'md2ipynb',
+}
+
+expected = [
+    '# Read lines',
+    '',
+    'Hello md2ipynb!',
+]
+
+
+class ReadLinesTest(unittest.TestCase):
+  def test_from_iterable(self):
+    actual = list(lines(source.splitlines(), variables))
+    self.assertEqual(actual, expected)
+
+  def test_from_file(self):
+    actual = list(lines(source_file, variables))
+    self.assertEqual(actual, expected)
+
+  @patch("sys.stdin", StringIO(source))
+  def test_from_stdin(self):
+    actual = list(lines(variables=variables))
+    self.assertEqual(actual, expected)

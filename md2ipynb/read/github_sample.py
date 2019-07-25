@@ -15,28 +15,53 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import base64
 import re
 import requests
 
-GITHUB_SAMPLE_RE = re.compile(
-    r'{%\s*'                                    # {%
-    r'github_sample\s+'                         # github_sample
-    r'/([^/]+)/([^/]+)/blob/([^/]+)/([\w/.-]+)' # /owner/repo/blob/branch/path
-    r'\s+tag:(\w+)'                             # tag:region_tag
-    r'\s*%}'                                    # %}
-)
+from jinja2 import TemplateSyntaxError
+from jinja2 import lexer
+from jinja2 import nodes
+from jinja2.ext import Extension
+
+# Format: /<owner>/<repo>/blob/<branch>/<path>
+GITHUB_PATH_RE = re.compile(
+    r'^/([^/]+)/([^/]+)/blob/([^/]+)/([\w/.-]+)$')
 
 
-def github_samples(source):
-  for m in GITHUB_SAMPLE_RE.finditer(source):
-    owner, repo, branch, path, tag = m.groups()
-    url = 'https://raw.githubusercontent.com/{}/{}/{}/{}'.format(owner, repo, branch, path)
+class GithubSampleExt(Extension):
+  # A set of names that trigger the extension.
+  tags = set(['github_sample'])
+
+  def parse(self, parser):
+    lineno = next(parser.stream).lineno
+
+    github_path = ''
+    tag = None
+    last_token_type = None
+    for token in parser.stream:
+      if last_token_type == lexer.TOKEN_NAME and token.value == 'tag':
+        parser.stream.expect(lexer.TOKEN_COLON)
+        tag = parser.stream.expect(lexer.TOKEN_NAME).value
+        break
+      github_path += token.value
+      last_token_type = token.type
+
+    m = GITHUB_PATH_RE.match(github_path)
+    if not m:
+      raise TemplateSyntaxError(
+          'Github file path must be in the format '
+          '/<owner>/<repo>/blob/<branch>/<path>, '
+          'found {}'.format(repr(github_path)),
+          lineno, parser.name, parser.filename)
+
+    owner, repo, branch, path = m.groups()
+    url = 'https://raw.githubusercontent.com/{}/{}/{}/{}'.format(
+        owner, repo, branch, path)
     req = requests.get(url, params={'ref': branch})
-    if req.status_code == requests.codes.ok:
-      snippet = extract_snippet(req.text, tag)
-      source = source.replace(m.group(0), snippet, 1)
-  return source.rstrip()
+    assert req.status_code == requests.codes.ok, '{} {}, contents:\n{}'.format(
+        req, url, req.text)
+    snippet = extract_snippet(req.text, tag)
+    return nodes.Const(snippet)
 
 
 def extract_snippet(source, tag):

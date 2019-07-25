@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements. See the NOTICE file
 # distributed with this work for additional information
@@ -17,9 +19,10 @@
 
 import argparse
 
-import md2nb
 import nbformat
 import os
+
+from . import new_notebook
 
 
 def main(argv=None):
@@ -108,7 +111,7 @@ def main(argv=None):
     parser.error('imports must be in the format "path/to/file.md:index", '
                  'use --help for more information.')
 
-  notebook = md2nb.new_notebook(
+  notebook = new_notebook(
       args.input_file,
       variables=variables,
       imports=imports,
@@ -122,7 +125,7 @@ def main(argv=None):
   )
 
   if args.output_file:
-    with open(args.output_file) as f:
+    with open(args.output_file, 'w') as f:
       nbformat.write(notebook, f)
   else:
     print(nbformat.writes(notebook))

@@ -15,37 +15,43 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import jinja2
 import unittest
 
-from . import github_samples
-from .github_samples import extract_snippet
+from . import MarkdownLoader
+from . import GithubSampleExt
+from .github_sample import extract_snippet
 
 
-class GithubSamplesTest(unittest.TestCase):
-  def test_github_samples(self):
-    actual = github_samples('\n'.join([
-        '# Github samples',
+class GithubSampleExtTest(unittest.TestCase):
+  def test_github_sample(self):
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
+    template = env.from_string('\n'.join([
+        '# Github sample',
         '```',
-        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
+    actual = template.render()
     expected = '\n'.join([
-        '# Github samples',
+        '# Github sample',
         '```',
         "print('Hello world!')",
         '```',
     ])
     self.assertEqual(actual, expected)
 
-  def test_github_samples_py(self):
-    actual = github_samples('\n'.join([
-        '# Github samples - Python',
+  def test_github_sample_py(self):
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
+    template = env.from_string('\n'.join([
+        '# Github sample - Python',
         '```py',
-        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
+    actual = template.render()
     expected = '\n'.join([
-        '# Github samples - Python',
+        '# Github sample - Python',
         '```py',
         "print('Hello world!')",
         '```',
@@ -53,13 +59,15 @@ class GithubSamplesTest(unittest.TestCase):
     self.assertEqual(actual, expected)
 
   @unittest.skip('Languages other than Python are not implemented yet')
-  def test_github_samples_go(self):
-    actual = github_samples('\n'.join([
+  def test_github_sample_go(self):
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
+    template = env.from_string('\n'.join([
         '# Github samples - Go',
         '```go',
-        '{% github_sample /davidcavazos/md2nb/blob/master/examples/code/hello-world.go tag:hello_world %}',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}',
         '```',
     ]))
+    actual = template.render()
     expected = '\n'.join([
         '# Github samples - Go',
         '```go',
