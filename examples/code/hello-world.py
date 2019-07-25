@@ -13,6 +13,6 @@
 # limitations under the License.
 
 # [START hello_world]
-# The `print` function accepts a string argument.
+# This will show the message 'Hello world!'.
 print('Hello world!')
 # [END hello_world]
