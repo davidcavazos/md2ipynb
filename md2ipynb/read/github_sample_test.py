@@ -36,6 +36,7 @@ class GithubSampleExtTest(unittest.TestCase):
     expected = '\n'.join([
         '# Github sample',
         '```',
+        '# The `print` function accepts a string argument.',
         "print('Hello world!')",
         '```',
     ])
@@ -53,6 +54,7 @@ class GithubSampleExtTest(unittest.TestCase):
     expected = '\n'.join([
         '# Github sample - Python',
         '```py',
+        '# The `print` function accepts a string argument.',
         "print('Hello world!')",
         '```',
     ])
