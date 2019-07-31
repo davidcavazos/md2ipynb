@@ -23,15 +23,15 @@ from . import GithubSampleExt
 
 
 def lines(input_file='-', variables=None, jinja_env=None):
+  if not jinja_env:
+    jinja_env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
+
   if isinstance(input_file, str):
     # If input_file is '-', fileinput.input() will read from stdin.
     # Otherwise, it will open the file path.
     lines = [line.rstrip() for line in fileinput.input(input_file)]
   else:
     lines = [line.rstrip() for line in input_file]
-
-  if not jinja_env:
-    jinja_env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
 
   input_template = jinja_env.from_string('\n'.join(lines))
   source = input_template.render(variables or {})

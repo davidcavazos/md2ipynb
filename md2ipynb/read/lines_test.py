@@ -16,6 +16,7 @@
 # under the License.
 
 import jinja2
+import json
 import unittest
 
 from io import StringIO
@@ -23,20 +24,16 @@ from unittest.mock import patch
 
 from . import lines
 
-source_file = 'test/variables.md'
+source_file = 'test/hello.md'
+expected_file = 'test/hello-expected.md'
+variables_file = 'test/hello-variables.json'
+
 with open(source_file) as f:
-  source = f.read()
-
-variables = {
-    'title': 'Read lines',
-    'name': 'md2ipynb',
-}
-
-expected = [
-    '# Read lines',
-    '',
-    'Hello md2ipynb!',
-]
+  source = f.read().rstrip()
+with open(expected_file) as f:
+  expected = f.read().rstrip().splitlines()
+with open(variables_file) as f:
+  variables = json.load(f)
 
 
 class ReadLinesTest(unittest.TestCase):
@@ -51,4 +48,13 @@ class ReadLinesTest(unittest.TestCase):
   @patch("sys.stdin", StringIO(source))
   def test_from_stdin(self):
     actual = list(lines(variables=variables))
+    self.assertEqual(actual, expected)
+
+  def test_no_variables(self):
+    actual = list(lines(
+      source
+        .replace('{{ title }}', variables['title'])
+        .replace('{{name}}', variables['name'])
+        .splitlines()
+    ))
     self.assertEqual(actual, expected)

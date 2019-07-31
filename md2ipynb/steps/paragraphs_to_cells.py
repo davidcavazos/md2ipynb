@@ -38,7 +38,7 @@ def paragraphs_to_cells(paragraphs):
         return numbered
       i += 1
 
-  last_header = None
+  last_header = '_'
   contents = []
   for paragraph in paragraphs:
     if paragraph.startswith('#'):
@@ -57,7 +57,7 @@ def paragraphs_to_cells(paragraphs):
         )
         contents = []
       yield nbformat.v4.new_code_cell(
-          source='\n\n'.join(paragraph.splitlines()[1:-1]),
+          source='\n'.join(paragraph.splitlines()[1:-1]),
           metadata={'id': cell_id(last_header + '-code')},
       )
     else:

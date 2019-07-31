@@ -16,58 +16,66 @@
 # under the License.
 
 import jinja2
+import json
 import unittest
 
 from unittest.mock import patch
 
+from . import GithubSampleExt
 from . import MarkdownLoader
 
-source_file = 'test/variables.md'
+source_file = 'test/hello.md'
+expected_file = 'test/hello-expected.md'
+variables_file = 'test/hello-variables.json'
+
 with open(source_file) as f:
-  source = f.read()
-
-variables = {
-    'title': 'MarkdownLoader',
-    'name': 'md2ipynb',
-}
-
-expected = '''\
-# MarkdownLoader
-
-Hello md2ipynb!'''
+  source = f.read().rstrip()
+with open(expected_file) as f:
+  expected = f.read().rstrip()
+with open(variables_file) as f:
+  variables = json.load(f)
 
 
 class MarkdownLoaderTest(unittest.TestCase):
   def test_from_file(self):
-    env = jinja2.Environment(loader=MarkdownLoader())
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.get_template(source_file)
     self.assertEqual(template.render(variables), expected)
 
   def test_from_string(self):
-    env = jinja2.Environment(loader=MarkdownLoader())
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string(source)
     self.assertEqual(template.render(variables), expected)
 
   def test_include(self):
-    env = jinja2.Environment(loader=MarkdownLoader())
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
         "{% include 'test/title.md' %}",
         '',
         'Hello {{name}}!',
+        '',
+        '```py',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '```',
     ]))
     self.assertEqual(template.render(variables), expected)
 
   def test_include_searchpath(self):
-    env = jinja2.Environment(loader=MarkdownLoader('examples/templates'))
+    env = jinja2.Environment(loader=MarkdownLoader('examples/templates'),
+                             extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
         "{% include 'title.md' %}",
         '',
         'Hello {{name}}!',
+        '',
+        '```py',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '```',
     ]))
     self.assertEqual(template.render(variables), expected)
 
   def test_include_not_found(self):
-    env = jinja2.Environment(loader=MarkdownLoader())
+    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string("{% include 'non-existent-file.md' %}")
     with self.assertRaises(jinja2.exceptions.TemplateNotFound):
       template.render()

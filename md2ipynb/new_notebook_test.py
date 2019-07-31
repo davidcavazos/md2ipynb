@@ -15,21 +15,18 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import json
 import nbformat
 import unittest
 
 from . import new_notebook
 
-variables = {
-    'title': 'Hello world',
-    'name': 'md2ipynb',
-}
+source_file = 'test/hello.md'
+variables_file = 'test/hello-variables.json'
 
-expected_source = '\n'.join([
-    '# Hello world',
-    '',
-    'Hello md2ipynb!',
-])
+with open(variables_file) as f:
+  variables = json.load(f)
+
 
 def md_cell(source, id=''):
   return nbformat.v4.new_markdown_cell(source, metadata={'id': id})
@@ -54,11 +51,19 @@ def nb_metadata(name):
 
 class NewNotebookTest(unittest.TestCase):
   def test_new_notebook_hello_world(self):
-    actual = new_notebook('test/variables.md', variables)
+    actual = new_notebook(source_file, variables)
     expected = nbformat.v4.new_notebook(
         cells=[
-            md_cell(expected_source, 'hello-world'),
+            md_cell('\n'.join([
+                '# ' + variables['title'],
+                '',
+                'Hello {}!'.format(variables['name']),
+            ]), 'hello-world'),
+            code_cell('\n'.join([
+                "# This will show the message 'Hello world!'.",
+                "print('Hello world!')",
+            ]), 'hello-world-code'),
         ],
-        metadata=nb_metadata('Hello world'),
+        metadata=nb_metadata(variables['title']),
     )
     self.assertEqual(actual, expected)

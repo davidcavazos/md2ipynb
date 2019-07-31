@@ -22,6 +22,8 @@ from . import MarkdownLoader
 from . import GithubSampleExt
 from .github_sample import extract_snippet
 
+title = 'Github sample'
+
 
 class GithubSampleExtTest(unittest.TestCase):
   def test_github_sample(self):
@@ -32,11 +34,11 @@ class GithubSampleExtTest(unittest.TestCase):
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
-    actual = template.render()
+    actual = template.render(title=title)
     expected = '\n'.join([
         '# Github sample',
         '```',
-        '# The `print` function accepts a string argument.',
+        "# This will show the message 'Hello world!'.",
         "print('Hello world!')",
         '```',
     ])
@@ -45,16 +47,16 @@ class GithubSampleExtTest(unittest.TestCase):
   def test_github_sample_py(self):
     env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
-        '# Github sample - Python',
+        '# {{ title }} - Python',
         '```py',
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
-    actual = template.render()
+    actual = template.render(title=title)
     expected = '\n'.join([
         '# Github sample - Python',
         '```py',
-        '# The `print` function accepts a string argument.',
+        "# This will show the message 'Hello world!'.",
         "print('Hello world!')",
         '```',
     ])
@@ -64,12 +66,12 @@ class GithubSampleExtTest(unittest.TestCase):
   def test_github_sample_go(self):
     env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
-        '# Github samples - Go',
+        '# {{ title }} - Go',
         '```go',
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}',
         '```',
     ]))
-    actual = template.render()
+    actual = template.render(title=title)
     expected = '\n'.join([
         '# Github samples - Go',
         '```go',

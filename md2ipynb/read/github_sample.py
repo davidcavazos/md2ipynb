@@ -55,13 +55,22 @@ class GithubSampleExt(Extension):
           lineno, parser.name, parser.filename)
 
     owner, repo, branch, path = m.groups()
+    call = self.call_method('_github_sample', [
+        nodes.Const(owner),
+        nodes.Const(repo),
+        nodes.Const(branch),
+        nodes.Const(path),
+        nodes.Const(tag),
+    ])
+    return nodes.CallBlock(call, [], [], []).set_lineno(lineno)
+
+  def _github_sample(self, owner, repo, branch, path, tag, caller):
     url = 'https://raw.githubusercontent.com/{}/{}/{}/{}'.format(
         owner, repo, branch, path)
     req = requests.get(url, params={'ref': branch})
     assert req.status_code == requests.codes.ok, '{} {}, contents:\n{}'.format(
         req, url, req.text)
-    snippet = extract_snippet(req.text, tag)
-    return nodes.Const(snippet)
+    return extract_snippet(req.text, tag)
 
 
 def extract_snippet(source, tag):
