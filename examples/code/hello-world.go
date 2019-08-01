@@ -15,8 +15,9 @@ package main
 
 import "fmt"
 
+// Hello world in Go.
 func main() {
-	fmt.Println("Hello world!")
+	fmt.Println("Hello from Go!")
 }
 
 // [END hello_world]

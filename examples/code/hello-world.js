@@ -11,5 +11,6 @@
 // limitations under the License.
 
 // [START hello_world]
-console.log('Hello world!')
+// Hello world in JavaScript.
+console.log('Hello from JavaScript!')
 // [END hello_world]

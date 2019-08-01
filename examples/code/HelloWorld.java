@@ -11,9 +11,10 @@
 // limitations under the License.
 
 // [START hello_world]
+// Hello world in Java.
 public class HelloWorld {
   public static void main(String[] args) {
-    System.out.println("Hello world!");
+    System.out.println("Hello from Java!");
   }
 }
 // [END hello_world]

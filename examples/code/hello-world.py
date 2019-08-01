@@ -13,6 +13,6 @@
 # limitations under the License.
 
 # [START hello_world]
-# This will show the message 'Hello world!'.
-print('Hello world!')
+# Hello world in Python.
+print('Hello from Python!')
 # [END hello_world]
