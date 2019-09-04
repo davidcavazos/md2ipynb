@@ -15,17 +15,23 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import unittest
-
-from md2ipynb import read
-
-from . import lang
+import md2ipynb
 
 
-class LangTest(unittest.TestCase):
-  def test_lang_py(self):
-    # actual = list(lang(read_lines('test/lang.md')))
-    # expected = [
-    # ]
-    # self.assertEqual(actual, expected)
-    pass
+def filter_classes(paragraphs, keep_classes=None):
+  if keep_classes is None:
+    keep_classes = {'language-py', 'shell-sh'}
+  elif isinstance(keep_classes, str):
+    keep_classes = {keep_classes}
+  else:
+    keep_classes = set(keep_classes)
+
+  for paragraph in paragraphs:
+    m = md2ipynb.util.class_re.search(paragraph)
+    if m:
+      paragraph_class = m.group(1)
+      if paragraph_class not in keep_classes:
+        continue
+      paragraph = paragraph.replace(m.group(), '').strip('\n')
+    if paragraph:
+      yield paragraph

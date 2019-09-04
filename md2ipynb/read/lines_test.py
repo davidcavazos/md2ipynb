@@ -39,16 +39,16 @@ with open(variables_file) as f:
 class ReadLinesTest(unittest.TestCase):
   def test_from_iterable(self):
     actual = list(lines(source.splitlines(), variables))
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
 
   def test_from_file(self):
     actual = list(lines(source_file, variables))
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
 
   @patch("sys.stdin", StringIO(source))
   def test_from_stdin(self):
     actual = list(lines(variables=variables))
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
 
   def test_no_variables(self):
     actual = list(lines(
@@ -57,4 +57,4 @@ class ReadLinesTest(unittest.TestCase):
         .replace('{{name}}', variables['name'])
         .splitlines()
     ))
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)

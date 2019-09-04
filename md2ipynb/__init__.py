@@ -17,5 +17,6 @@
 
 from . import read
 from . import steps
+from . import util
 from .apply import apply
 from .new_notebook import new_notebook

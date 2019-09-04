@@ -21,25 +21,30 @@ from md2ipynb import read
 
 
 def imports(sections, imports=None, variables=None, jinja_env=None):
+  def sections_from_imports(import_index):
+    for input_file in imports[import_index]:
+      for import_section in read.sections(input_file, variables, jinja_env):
+        yield import_section
+
   sections = list(sections)
   if imports is None:
     imports = {}
 
-  # Normalize imports to the form: `non_negative_index: [file1, file2, ...]`
+  # Normalize imports to the form: `{non_negative_index: [file1, file2, ...]}`.
   for index, input_file in imports.items():
     if index < 0:
       imports[len(sections)+index+1] = input_file
       del imports[index]
 
+  # Iterate over all the sections, inserting any imports if needed.
   for i, section in enumerate(sections):
     if i in imports:
-      for input_file in imports[i]:
-        for import_section in read.sections(input_file, variables, jinja_env):
-          yield import_section
+      for import_section in sections_from_imports(i):
+        yield import_section
     yield section
 
+  # Include imports that go at the end.
   i = len(sections)
   if i in imports:
-    for input_file in imports[i]:
-      for import_section in read.sections(input_file, variables, jinja_env):
-        yield import_section
+    for import_section in sections_from_imports(i):
+      yield import_section

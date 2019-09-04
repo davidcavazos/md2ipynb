@@ -34,71 +34,22 @@ class GithubSampleExtTest(unittest.TestCase):
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
-    actual = template.render(title=title)
     expected = '\n'.join([
         '# Github sample',
         '```',
-        "# This will show the message 'Hello world!'.",
-        "print('Hello world!')",
+        "# Hello world in Python.",
+        "print('Hello from Python!')",
         '```',
     ])
-    self.assertEqual(actual, expected)
-
-  def test_github_sample_py(self):
-    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
-    template = env.from_string('\n'.join([
-        '# {{ title }} - Python',
-        '```py',
-        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
-        '```',
-    ]))
     actual = template.render(title=title)
-    expected = '\n'.join([
-        '# Github sample - Python',
-        '```py',
-        "# This will show the message 'Hello world!'.",
-        "print('Hello world!')",
-        '```',
-    ])
-    self.assertEqual(actual, expected)
-
-  @unittest.skip('Languages other than Python are not implemented yet')
-  def test_github_sample_go(self):
-    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
-    template = env.from_string('\n'.join([
-        '# {{ title }} - Go',
-        '```go',
-        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}',
-        '```',
-    ]))
-    actual = template.render(title=title)
-    expected = '\n'.join([
-        '# Github samples - Go',
-        '```go',
-        '!mkdir -p examples/code',
-        '```',
-        '',
-        '```go',
-        '%%writefile examples/code/hello-world.go',
-        'package main',
-        '',
-        'import "fmt"',
-        '',
-        'func main() {',
-        '\tfmt.Println("Hello world!")',
-        '}',
-        '',
-        '```',
-        '',
-        '```go',
-        '!go run examples/code/hello-world.go',
-        '```',
-    ])
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
 
 
 class ExtractSnippetTest(unittest.TestCase):
   def test_extract_snippet(self):
+    expected = '\n'.join([
+        "print('Hello')",
+    ])
     actual = extract_snippet(
         source='\n'.join([
             '# Extract snippet',
@@ -108,12 +59,14 @@ class ExtractSnippetTest(unittest.TestCase):
         ]),
         tag='region_tag',
     )
-    expected = '\n'.join([
-        "print('Hello')",
-    ])
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
 
   def test_extract_snippet_indented(self):
+    expected = '\n'.join([
+        "print('Hello')",
+        'if True:',
+        "  print('world!')",
+    ])
     actual = extract_snippet(
         source='\n'.join([
             '# Extract snippet indented',
@@ -126,9 +79,4 @@ class ExtractSnippetTest(unittest.TestCase):
         ]),
         tag='region_tag',
     )
-    expected = '\n'.join([
-        "print('Hello')",
-        'if True:',
-        "  print('world!')",
-    ])
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)

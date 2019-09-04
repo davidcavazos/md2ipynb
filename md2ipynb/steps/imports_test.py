@@ -22,13 +22,6 @@ from . import imports
 
 class ImportsTest(unittest.TestCase):
   def test_imports_at_start(self):
-    actual = list(imports(
-        sections=[['# section 1'], ['# section 2']],
-        imports={
-            0: [['# title', 'start', '# subtitle']],
-            1: [['# section 1.1']],
-        },
-    ))
     expected = [
         ['# title', 'start'],
         ['# subtitle'],
@@ -36,16 +29,16 @@ class ImportsTest(unittest.TestCase):
         ['# section 1.1'],
         ['# section 2'],
     ]
-    self.assertEqual(actual, expected)
-
-  def test_imports_at_end(self):
     actual = list(imports(
         sections=[['# section 1'], ['# section 2']],
         imports={
-            -1: [['# pre-end', ':)', '# end']],
-            -2: [['# section 1.1']],
+            0: [['# title', 'start', '# subtitle']],
+            1: [['# section 1.1']],
         },
     ))
+    self.assertEqual(expected, actual)
+
+  def test_imports_at_end(self):
     expected = [
         ['# section 1'],
         ['# section 1.1'],
@@ -53,9 +46,22 @@ class ImportsTest(unittest.TestCase):
         ['# pre-end', ':)'],
         ['# end'],
     ]
-    self.assertEqual(actual, expected)
+    actual = list(imports(
+        sections=[['# section 1'], ['# section 2']],
+        imports={
+            -1: [['# pre-end', ':)', '# end']],
+            -2: [['# section 1.1']],
+        },
+    ))
+    self.assertEqual(expected, actual)
 
   def test_imports_file(self):
+    expected = [
+        ['# Title'],
+        ['# section 1'],
+        ['# section 2'],
+        ['## Clean up', "You're all done 🎉🎉"]
+    ]
     actual = list(imports(
         sections=[['# section 1'], ['# section 2']],
         imports={
@@ -64,10 +70,4 @@ class ImportsTest(unittest.TestCase):
         },
         variables={'title': 'Title'},
     ))
-    expected = [
-        ['# Title'],
-        ['# section 1'],
-        ['# section 2'],
-        ['## Clean up', "You're all done 🎉🎉"]
-    ]
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)

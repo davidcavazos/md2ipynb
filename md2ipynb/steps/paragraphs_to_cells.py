@@ -41,15 +41,19 @@ def paragraphs_to_cells(paragraphs):
   last_header = '_'
   contents = []
   for paragraph in paragraphs:
-    if paragraph.startswith('#'):
+    lines = paragraph.splitlines()
+    if not lines:
+      continue
+
+    if lines[0].startswith('#'):
       if contents:
         yield nbformat.v4.new_markdown_cell(
             source='\n\n'.join(contents),
             metadata={'id': cell_id(last_header)},
         )
       contents = [paragraph]
-      last_header = paragraph.splitlines()[0].lstrip('# ')
-    elif paragraph.startswith('```') and paragraph.endswith('```'):
+      last_header = lines[0].lstrip('#').strip()
+    elif lines[0].startswith('```') and lines[-1].startswith('```'):
       if contents:
         yield nbformat.v4.new_markdown_cell(
             source='\n\n'.join(contents),
@@ -57,7 +61,7 @@ def paragraphs_to_cells(paragraphs):
         )
         contents = []
       yield nbformat.v4.new_code_cell(
-          source='\n'.join(paragraph.splitlines()[1:-1]),
+          source='\n'.join(lines[1:-1]),
           metadata={'id': cell_id(last_header + '-code')},
       )
     else:

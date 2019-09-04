@@ -15,9 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .flatten import flatten
-from .filter_classes import filter_classes
-from .imports import imports
-from .open_in_colab import open_in_colab
-from .paragraphs_to_cells import paragraphs_to_cells
-from .view_the_docs import view_the_docs
+def compare_files(test_file, expected_file, paragraphs_fn):
+  with open(expected_file) as f:
+    expected = f.read().rstrip()
+  actual = '\n\n'.join(paragraphs_fn(test_file))
+  return expected, actual

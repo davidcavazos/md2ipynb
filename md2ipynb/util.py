@@ -15,12 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-DEFAULT_SHELL = ['sh', 'bash']
+import re
 
-
-def lang(paragraphs, lang='py', shell=None):
-  if not shell:
-    shell = DEFAULT_SHELL
-
-  for paragraph in paragraphs:
-    yield paragraph
+# Format: {: .class-name }
+class_re = re.compile(r'\s*{:\s*\.([\w-]+)\s*}\n*')

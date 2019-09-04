@@ -32,36 +32,36 @@ def remove(lines, text='Hello'):
 
 class ApplyTest(unittest.TestCase):
   def test_apply_empty(self):
-    actual = apply([])
     expected = []
-    self.assertEqual(actual, expected)
+    actual = apply([])
+    self.assertEqual(expected, actual)
 
   def test_apply_list(self):
-    actual = apply(['a', 'b', 'c'])
     expected = ['a', 'b', 'c']
-    self.assertEqual(actual, expected)
+    actual = apply(['a', 'b', 'c'])
+    self.assertEqual(expected, actual)
 
   def test_apply_iterable(self):
     def get_inputs():
       yield 'a'
       yield 'b'
       yield 'c'
-    actual = apply(get_inputs())
     expected = ['a', 'b', 'c']
-    self.assertEqual(actual, expected)
+    actual = apply(get_inputs())
+    self.assertEqual(expected, actual)
 
   def test_apply(self):
+    expected = ['* world', 'say hello']
     actual = list(apply(
         inputs=['Hello World', 'Say hello'],
         steps=[remove, lowercase],
     ))
-    expected = ['* world', 'say hello']
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
 
   def test_apply_fn_args(self):
+    expected = ['* world', 'say *']
     actual = list(apply(
         inputs=['Hello World', 'Say hello'],
         steps=[lowercase, (remove, 'hello')],
     ))
-    expected = ['* world', 'say *']
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)

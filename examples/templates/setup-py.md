@@ -21,12 +21,12 @@ virtualenv env
 source env/bin/activate
 ```
 
-Install the `{{ name }}` module.
+Install the `{{ package }}` package.
 
 ```bash
-pip install {{ name }}
+pip install -q -U {{ package }}
 ```
 
 ```powershell
-python -m pip install {{ name }}
+python -m pip install {{ package }}
 ```

@@ -39,9 +39,9 @@ def main(argv=None):
 
   parser.add_argument(
       '--var',
-      type=lambda value: value.split(':', 1),
+      type=lambda value: value.split('=', 1),
       nargs='+',
-      help='Sets a variable in the format "name:value".',
+      help='Sets a variable in the format "name=value".',
   )
 
   parser.add_argument(

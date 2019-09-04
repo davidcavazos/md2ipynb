@@ -22,6 +22,6 @@ from . import flatten
 
 class FlattenTest(unittest.TestCase):
   def test_flatten(self):
-    actual = list(flatten([['A'], ['B', 'C'], ['D']]))
     expected = ['A', 'B', 'C', 'D']
-    self.assertEqual(actual, expected)
+    actual = list(flatten([['A'], ['B', 'C'], ['D']]))
+    self.assertEqual(expected, actual)

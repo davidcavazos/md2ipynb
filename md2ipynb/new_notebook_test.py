@@ -49,10 +49,12 @@ def nb_metadata(name):
   }
 
 
+def as_dict(nb):
+  return json.loads(nbformat.writes(nb))
+
 class NewNotebookTest(unittest.TestCase):
   def test_new_notebook_hello_world(self):
-    actual = new_notebook(source_file, variables)
-    expected = nbformat.v4.new_notebook(
+    expected = as_dict(nbformat.v4.new_notebook(
         cells=[
             md_cell('\n'.join([
                 '# ' + variables['title'],
@@ -60,10 +62,12 @@ class NewNotebookTest(unittest.TestCase):
                 'Hello {}!'.format(variables['name']),
             ]), 'hello-world'),
             code_cell('\n'.join([
-                "# This will show the message 'Hello world!'.",
-                "print('Hello world!')",
+                "# Hello world in Python.",
+                "print('Hello from Python!')",
             ]), 'hello-world-code'),
         ],
         metadata=nb_metadata(variables['title']),
-    )
-    self.assertEqual(actual, expected)
+    ))
+    actual = as_dict(new_notebook(source_file, variables))
+    self.maxDiff = None
+    self.assertEqual(expected, actual)

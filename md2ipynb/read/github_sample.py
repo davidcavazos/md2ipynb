@@ -23,12 +23,12 @@ from jinja2 import lexer
 from jinja2 import nodes
 from jinja2.ext import Extension
 
-# Format: /<owner>/<repo>/blob/<branch>/<path>
-GITHUB_PATH_RE = re.compile(
-    r'^/([^/]+)/([^/]+)/blob/([^/]+)/([\w/.-]+)$')
-
 
 class GithubSampleExt(Extension):
+  # Format: /<owner>/<repo>/blob/<branch>/<path>
+  github_path_re = re.compile(
+      r'^/([^/]+)/([^/]+)/blob/([^/]+)/([\w/.-]+)$')
+
   # A set of names that trigger the extension.
   tags = set(['github_sample'])
 
@@ -46,7 +46,7 @@ class GithubSampleExt(Extension):
       github_path += token.value
       last_token_type = token.type
 
-    m = GITHUB_PATH_RE.match(github_path)
+    m = self.github_path_re.match(github_path)
     if not m:
       raise TemplateSyntaxError(
           'Github file path must be in the format '

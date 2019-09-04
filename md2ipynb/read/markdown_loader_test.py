@@ -28,6 +28,7 @@ source_file = 'test/hello.md'
 expected_file = 'test/hello-expected.md'
 variables_file = 'test/hello-variables.json'
 
+env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
 with open(source_file) as f:
   source = f.read().rstrip()
 with open(expected_file) as f:
@@ -38,17 +39,16 @@ with open(variables_file) as f:
 
 class MarkdownLoaderTest(unittest.TestCase):
   def test_from_file(self):
-    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.get_template(source_file)
-    self.assertEqual(template.render(variables), expected)
+    actual = template.render(variables)
+    self.assertEqual(expected, actual)
 
   def test_from_string(self):
-    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string(source)
-    self.assertEqual(template.render(variables), expected)
+    actual = template.render(variables)
+    self.assertEqual(expected, actual)
 
   def test_include(self):
-    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
         "{% include 'test/title.md' %}",
         '',
@@ -58,7 +58,8 @@ class MarkdownLoaderTest(unittest.TestCase):
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
-    self.assertEqual(template.render(variables), expected)
+    actual = template.render(variables)
+    self.assertEqual(expected, actual)
 
   def test_include_searchpath(self):
     env = jinja2.Environment(loader=MarkdownLoader('examples/templates'),
@@ -72,10 +73,10 @@ class MarkdownLoaderTest(unittest.TestCase):
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
     ]))
-    self.assertEqual(template.render(variables), expected)
+    actual = template.render(variables)
+    self.assertEqual(expected, actual)
 
   def test_include_not_found(self):
-    env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
     template = env.from_string("{% include 'non-existent-file.md' %}")
     with self.assertRaises(jinja2.exceptions.TemplateNotFound):
       template.render()

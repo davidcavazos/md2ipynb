@@ -3,6 +3,6 @@
 Hello md2ipynb!
 
 ```py
-# This will show the message 'Hello world!'.
-print('Hello world!')
+# Hello world in Python.
+print('Hello from Python!')
 ```

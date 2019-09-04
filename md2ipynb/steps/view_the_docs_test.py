@@ -31,10 +31,6 @@ def code_cell(source, id=''):
 
 class ViewTheDocsTest(unittest.TestCase):
   def test_view_the_docs(self):
-    actual = list(view_the_docs(
-        cells=[md_cell('content', id='H1')],
-        docs_url='www.docs-url.com',
-    ))
     expected = [
         md_cell(
             '<table align="left">'
@@ -58,37 +54,41 @@ class ViewTheDocsTest(unittest.TestCase):
             id='view-the-docs-bottom',
         ),
     ]
-    self.assertEqual(actual, expected)
+    actual = list(view_the_docs(
+        cells=[md_cell('content', id='H1')],
+        docs_url='www.docs-url.com',
+    ))
+    self.assertEqual(expected, actual)
 
   def test_view_the_docs_logo(self):
+    expected = [
+        md_cell(
+            '<table align="left">'
+              '<td>'
+                '<a target="_blank" href="www.docs-url.com">'
+                  '<img src="www.docs-url.com/logo.png" width="32" height="32" />'
+                  'View the Docs'
+                '</a>'
+              '</td>'
+            '</table>',
+            id='view-the-docs-top',
+        ),
+        md_cell('content', id='H1'),
+        md_cell(
+            '<table align="left">'
+              '<td>'
+                '<a target="_blank" href="www.docs-url.com">'
+                  '<img src="www.docs-url.com/logo.png" width="32" height="32" />'
+                  'View the Docs'
+                '</a>'
+              '</td>'
+            '</table>',
+            id='view-the-docs-bottom',
+        ),
+    ]
     actual = list(view_the_docs(
         cells=[md_cell('content', id='H1')],
         docs_url='www.docs-url.com',
         docs_logo_url='www.docs-url.com/logo.png',
     ))
-    expected = [
-        md_cell(
-            '<table align="left">'
-              '<td>'
-                '<a target="_blank" href="www.docs-url.com">'
-                  '<img src="www.docs-url.com/logo.png" width="32" height="32" />'
-                  'View the Docs'
-                '</a>'
-              '</td>'
-            '</table>',
-            id='view-the-docs-top',
-        ),
-        md_cell('content', id='H1'),
-        md_cell(
-            '<table align="left">'
-              '<td>'
-                '<a target="_blank" href="www.docs-url.com">'
-                  '<img src="www.docs-url.com/logo.png" width="32" height="32" />'
-                  'View the Docs'
-                '</a>'
-              '</td>'
-            '</table>',
-            id='view-the-docs-bottom',
-        ),
-    ]
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)

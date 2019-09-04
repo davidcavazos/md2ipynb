@@ -17,46 +17,50 @@
 
 import unittest
 
+from md2ipynb import testing
+
 from . import paragraphs
 
 
 class ParagraphsTest(unittest.TestCase):
   def test_paragraphs(self):
-    actual = list(paragraphs([
-        '# H1',
-        'line 1',
-        'line 2',
-        '```',
-        'code 1',
-        'code 2',
-        '```',
-        'line 3',
-    ]))
-    expected = [
-        '# H1',
-        'line 1\nline 2',
-        '```\ncode 1\ncode 2\n```',
-        'line 3',
-    ]
-    self.assertEqual(actual, expected)
+    expected, actual = testing.compare_files(
+        'test/paragraphs.md',
+        'test/paragraphs-expected.md',
+        paragraphs)
+    self.assertEqual(expected, actual)
 
   def test_paragraphs_spaced(self):
-    actual = list(paragraphs([
-        '', '', '# H1',
-        '', '', 'line 1',
-        '', '', 'line 2',
-        '', '', '```',
-        '', '', 'code 1',
-        '', '', 'code 2',
-        '', '', '```',
-        '', '', 'line 3',
-        '', '',
-    ]))
-    expected = [
-        '# H1',
-        'line 1',
-        'line 2',
-        '```\n\n\ncode 1\n\n\ncode 2\n\n\n```',
-        'line 3',
-    ]
-    self.assertEqual(actual, expected)
+    expected, actual = testing.compare_files(
+        'test/paragraphs-spaced.md',
+        'test/paragraphs-spaced-expected.md',
+        paragraphs)
+    self.assertEqual(expected, actual)
+
+  def test_paragraph_classes_leading(self):
+    expected, actual = testing.compare_files(
+        'test/classes-leading.md',
+        'test/classes-leading.md',
+        paragraphs)
+    self.assertEqual(expected, actual)
+
+  def test_paragraph_classes_leading_line(self):
+    expected, actual = testing.compare_files(
+        'test/classes-leading-line.md',
+        'test/classes-leading-line.md',
+        paragraphs)
+    self.assertEqual(expected, actual)
+
+  def test_paragraph_classes_trailing(self):
+    expected, actual = testing.compare_files(
+        'test/classes-trailing.md',
+        'test/classes-trailing.md',
+        paragraphs)
+    self.assertEqual(expected, actual)
+
+  def test_paragraph_classes_trailing_line(self):
+    expected, actual = testing.compare_files(
+        'test/classes-trailing-line.md',
+        'test/classes-trailing-line.md',
+        paragraphs)
+    self.assertEqual(expected, actual)

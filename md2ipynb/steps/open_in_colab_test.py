@@ -30,10 +30,6 @@ def code_cell(source, id=''):
 
 class ViewTheDocsTest(unittest.TestCase):
   def test_open_in_colab(self):
-    actual = list(open_in_colab(
-        cells=[md_cell('content', id='H1')],
-        ipynb_github_url='https://github.com/user/repo/blob/master/notebook.ipynb',
-    ))
     expected = [
         md_cell(
             '<a href="https://colab.research.google.com/github/user/repo/blob/master/notebook.ipynb" target="_parent">'
@@ -43,4 +39,8 @@ class ViewTheDocsTest(unittest.TestCase):
         ),
         md_cell('content', id='H1'),
     ]
-    self.assertEqual(actual, expected)
+    actual = list(open_in_colab(
+        cells=[md_cell('content', id='H1')],
+        ipynb_github_url='https://github.com/user/repo/blob/master/notebook.ipynb',
+    ))
+    self.assertEqual(expected, actual)

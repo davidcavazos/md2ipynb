@@ -15,34 +15,61 @@
 # specific language governing permissions and limitations
 # under the License.
 
+import re
+
+from md2ipynb.util import class_re
+
 from . import lines
 
 
 def paragraphs(input_file='-', variables=None, jinja_env=None):
+  is_paragraph_done = False
   in_code_block = False
-  paragraph = []
-  for line in lines(input_file, variables, jinja_env):
+  paragraph_lines = []
+  for raw_line in lines(input_file, variables, jinja_env):
+    line = class_re.sub('', raw_line)
+    if is_paragraph_done:
+      is_paragraph_done = False
+      if paragraph_lines:
+        trailing_paragraph_class = raw_line and not line
+        if trailing_paragraph_class:
+          paragraph_lines.append(raw_line)
+        yield '\n'.join(paragraph_lines)
+        paragraph_lines = []
+        if trailing_paragraph_class:
+          continue
+
     if in_code_block:
-      paragraph.append(line)
-      if line.endswith('```'):
+      paragraph_lines.append(raw_line)
+      if line.startswith('```'):
         in_code_block = False
-        if paragraph:
-          yield '\n'.join(paragraph)
-        paragraph = []
+        is_paragraph_done = True
+
     elif not in_code_block and line.startswith('```'):
       in_code_block = True
-      if paragraph:
-        yield '\n'.join(paragraph)
-      paragraph = [line]
-    elif not line and paragraph:
-      yield '\n'.join(paragraph)
-      paragraph = []
+      if len(paragraph_lines) == 1 and class_re.match(paragraph_lines[0]):
+        paragraph_lines.append(raw_line)
+      else:
+        if paragraph_lines:
+          yield '\n'.join(paragraph_lines)
+        paragraph_lines = [raw_line]
+
     elif line.startswith('#'):
-      if paragraph:
-        yield '\n'.join(paragraph)
-      paragraph = []
-      yield line
-    elif line:
-      paragraph.append(line)
-  if paragraph:
-    yield '\n'.join(paragraph)
+      if len(paragraph_lines) == 1 and class_re.match(paragraph_lines[0]):
+        paragraph_lines.append(raw_line)
+      else:
+        if paragraph_lines:
+          yield '\n'.join(paragraph_lines)
+        paragraph_lines = [raw_line]
+      is_paragraph_done = True
+
+    elif raw_line:
+      paragraph_lines.append(raw_line)
+
+    else:  # raw_line is empty.
+      if paragraph_lines:
+        yield '\n'.join(paragraph_lines)
+        paragraph_lines = []
+
+  if paragraph_lines:
+    yield '\n'.join(paragraph_lines)

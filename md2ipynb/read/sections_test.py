@@ -22,16 +22,6 @@ from . import sections
 
 class SectionsTest(unittest.TestCase):
   def test_sections(self):
-    actual = list(sections([
-        'line 0',
-        '# H1',
-        'line 1\nline 2',
-        '```\ncode 1\ncode 2\n```',
-        'line 3',
-        '## H2',
-        'line 4',
-        '```\ncode 3\n```',
-    ]))
     expected = [
         [
             '# H1',
@@ -45,9 +35,20 @@ class SectionsTest(unittest.TestCase):
             '```\ncode 3\n```',
         ],
     ]
-    self.assertEqual(actual, expected)
+    actual = list(sections([
+        'line 0',
+        '# H1',
+        'line 1\nline 2',
+        '```\ncode 1\ncode 2\n```',
+        'line 3',
+        '## H2',
+        'line 4',
+        '```\ncode 3\n```',
+    ]))
+    self.assertEqual(expected, actual)
 
   def test_sections_start_on_header(self):
+    expected = [['line 0'], ['# H1', 'line 1\nline 2']]
     actual = list(sections(
         input_file=[
             'line 0',
@@ -56,5 +57,4 @@ class SectionsTest(unittest.TestCase):
         ],
         start_on_header=False,
     ))
-    expected = [['line 0'], ['# H1', 'line 1\nline 2']]
-    self.assertEqual(actual, expected)
+    self.assertEqual(expected, actual)
