@@ -19,20 +19,18 @@ import jinja2
 import md2ipynb
 import nbformat
 
-DEFAULT_KERNEL = 'python3'
-
 
 def new_notebook(
     input_file,
     variables=None,
     imports=None,
     notebook_title=None,
-    lang=None,
+    keep_classes=None,
     shell=None,
     docs_url=None,
     docs_logo_url=None,
     github_ipynb_url=None,
-    kernel=None,
+    kernel='python3',
     steps=None,
     jinja_env=None,
 ):
@@ -41,6 +39,7 @@ def new_notebook(
   paragraphs = md2ipynb.apply(sections, [
       (md2ipynb.steps.imports, imports, variables, jinja_env),
       md2ipynb.steps.flatten,
+      (md2ipynb.steps.filter_classes, keep_classes)
   ])
   paragraphs = md2ipynb.apply(paragraphs, steps)
   cells = list(md2ipynb.apply(paragraphs, [
@@ -57,8 +56,6 @@ def new_notebook(
       notebook_title = first_line.strip('# ')
 
   # Create the notebook with all the cells.
-  if not kernel:
-    kernel = DEFAULT_KERNEL
   metadata = {
     'colab': {"toc_visible": True},
     'kernelspec': {'name': kernel, 'display_name': kernel},

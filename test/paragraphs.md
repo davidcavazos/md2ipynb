@@ -8,3 +8,6 @@ code 2
 line 3
 ## H2
 line 4
+```
+code 3
+```

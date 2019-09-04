@@ -56,20 +56,18 @@ def main(argv=None):
   )
 
   parser.add_argument(
+      '--keep-classes',
+      nargs='+',
+      help='Paragraph classes to keep, any other classes will be filtered out. '
+           'Paragraphs without any class are always kept. '
+           "Format of a class is '{: .className}',"
+           'which can be at the beginning or the end of the paragraph, '
+           'or a line before or after.',
+  )
+
+  parser.add_argument(
       '--notebook-title',
       help='Notebook title to show on Colab.',
-  )
-
-  parser.add_argument(
-      '--lang',
-      help='Language to include for code blocks.',
-  )
-
-  parser.add_argument(
-      '--lang-shell',
-      nargs='+',
-      help='Shell command language(s) to include for code blocks '
-           'as regular expressions.',
   )
 
   parser.add_argument(
@@ -89,6 +87,7 @@ def main(argv=None):
 
   parser.add_argument(
       '--kernel',
+      default='python3',
       help='Notebook kernel to use, defaults to "python3".',
   )
 
@@ -115,9 +114,8 @@ def main(argv=None):
       args.input_file,
       variables=variables,
       imports=imports,
+      keep_classes=args.keep_classes,
       notebook_title=args.notebook_title,
-      lang=args.lang,
-      lang_shell=args.lang_shell,
       docs_url=args.docs_url,
       docs_logo_url=args.docs_logo_url,
       github_ipynb_url=args.github_ipynb_url,
@@ -125,6 +123,9 @@ def main(argv=None):
   )
 
   if args.output_file:
+    output_dir = os.path.dirname(args.output_file)
+    if not os.path.exists(output_dir):
+      os.makedirs(output_dir)
     with open(args.output_file, 'w') as f:
       nbformat.write(notebook, f)
   else:

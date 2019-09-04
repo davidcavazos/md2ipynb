@@ -34,6 +34,54 @@ def get_paragraphs(class_names):
 
 
 class FilterClassesTest(unittest.TestCase):
+  def test_classes_code_block_A(self):
+    expected, actual = testing.compare_files(
+        'test/classes-code-block.md',
+        'test/classes-A-code-block-expected.md',
+        get_paragraphs('classA'),
+    )
+    self.assertEqual(expected, actual)
+
+  def test_classes_code_block_A_language(self):
+    expected, actual = testing.compare_files(
+        'test/classes-code-block.md',
+        'test/classes-A-code-block-expected.md',
+        get_paragraphs('language-classA'),
+    )
+    self.assertEqual(expected, actual)
+
+  def test_classes_code_block_B(self):
+    expected, actual = testing.compare_files(
+        'test/classes-code-block.md',
+        'test/classes-B-code-block-expected.md',
+        get_paragraphs('classB'),
+    )
+    self.assertEqual(expected, actual)
+
+  def test_classes_code_block_B_language(self):
+    expected, actual = testing.compare_files(
+        'test/classes-code-block.md',
+        'test/classes-B-code-block-expected.md',
+        get_paragraphs('language-classB'),
+    )
+    self.assertEqual(expected, actual)
+
+  def test_classes_code_block_AB(self):
+    expected, actual = testing.compare_files(
+        'test/classes-code-block.md',
+        'test/classes-AB-code-block-expected.md',
+        get_paragraphs(['classA', 'classB']),
+    )
+    self.assertEqual(expected, actual)
+
+  def test_classes_code_block_AB_language(self):
+    expected, actual = testing.compare_files(
+        'test/classes-code-block.md',
+        'test/classes-AB-code-block-expected.md',
+        get_paragraphs(['language-classA', 'language-classB']),
+    )
+    self.assertEqual(expected, actual)
+
   def test_classes_leading_A(self):
     expected, actual = testing.compare_files(
         'test/classes-leading.md',

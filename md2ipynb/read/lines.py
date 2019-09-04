@@ -17,6 +17,8 @@
 
 import fileinput
 import jinja2
+import tempfile
+from io import StringIO
 
 from . import MarkdownLoader
 from . import GithubSampleExt
@@ -26,6 +28,7 @@ def lines(input_file='-', variables=None, jinja_env=None):
   if not jinja_env:
     jinja_env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
 
+  # Read from a file, stdin or an iterable without any trailing newlines.
   if isinstance(input_file, str):
     # If input_file is '-', fileinput.input() will read from stdin.
     # Otherwise, it will open the file path.
@@ -33,7 +36,14 @@ def lines(input_file='-', variables=None, jinja_env=None):
   else:
     lines = [line.rstrip() for line in input_file]
 
-  input_template = jinja_env.from_string('\n'.join(lines))
+  # jinja_env.from_string() doesn't apply the MarkdownLoader,
+  # so we create a named temporary file instead.
+  with tempfile.NamedTemporaryFile('w') as f:
+    f.write('\n'.join(lines))
+    f.seek(0)
+    input_template = jinja_env.get_template(f.name)
+
+  # Render the template and yield the lines.
   source = input_template.render(variables or {})
   for line in source.splitlines():
     yield line.rstrip()

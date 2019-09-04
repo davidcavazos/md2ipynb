@@ -24,27 +24,24 @@ from unittest.mock import patch
 from . import GithubSampleExt
 from . import MarkdownLoader
 
-source_file = 'test/hello.md'
 expected_file = 'test/hello-expected.md'
 variables_file = 'test/hello-variables.json'
 
-env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
-with open(source_file) as f:
-  source = f.read().rstrip()
 with open(expected_file) as f:
   expected = f.read().rstrip()
 with open(variables_file) as f:
   variables = json.load(f)
 
+env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
 
 class MarkdownLoaderTest(unittest.TestCase):
-  def test_from_file(self):
-    template = env.get_template(source_file)
+  def test_from_file_markdown(self):
+    template = env.get_template('test/hello.md')
     actual = template.render(variables)
     self.assertEqual(expected, actual)
 
-  def test_from_string(self):
-    template = env.from_string(source)
+  def test_from_file_html(self):
+    template = env.get_template('test/hello.html')
     actual = template.render(variables)
     self.assertEqual(expected, actual)
 

@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import md2ipynb
+from md2ipynb.util import class_re
 
 
 def filter_classes(paragraphs, keep_classes=None):
@@ -27,11 +27,21 @@ def filter_classes(paragraphs, keep_classes=None):
     keep_classes = set(keep_classes)
 
   for paragraph in paragraphs:
-    m = md2ipynb.util.class_re.search(paragraph)
+    # Check for a paragraph class '{: .class}'.
+    m = class_re.search(paragraph)
     if m:
       paragraph_class = m.group(1)
       if paragraph_class not in keep_classes:
         continue
       paragraph = paragraph.replace(m.group(), '').strip('\n')
+
+    # Check for a code block '```class' both as 'class' and 'language-class'.
+    if paragraph.startswith('```') and paragraph.endswith('```'):
+      lang = paragraph.splitlines()[0].lstrip('`').strip()
+      possible_classes = {lang, 'language-' + lang}
+      if lang and not keep_classes.intersection(possible_classes):
+        continue
+
+    # If we're still here and the paragraph is not empty, yield it.
     if paragraph:
       yield paragraph
