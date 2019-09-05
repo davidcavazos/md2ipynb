@@ -26,8 +26,14 @@ def paragraphs(input_file='-', variables=None, jinja_env=None):
   is_paragraph_done = False
   in_code_block = False
   paragraph_lines = []
+
   for raw_line in lines(input_file, variables, jinja_env):
+    # `raw_line` is the unmodified line.
+    # `line` has the paragraph class {: .class} removed if any.
     line = class_re.sub('', raw_line)
+
+    # If a paragraph is marked as done, check for a trailing
+    # paragraph class {: class} and then yield the paragraph.
     if is_paragraph_done:
       is_paragraph_done = False
       if paragraph_lines:
@@ -39,12 +45,14 @@ def paragraphs(input_file='-', variables=None, jinja_env=None):
         if trailing_paragraph_class:
           continue
 
+    # Code block ends.
     if in_code_block:
       paragraph_lines.append(raw_line)
       if line.startswith('```'):
         in_code_block = False
         is_paragraph_done = True
 
+    # Code block starts.
     elif not in_code_block and line.startswith('```'):
       in_code_block = True
       if len(paragraph_lines) == 1 and class_re.match(paragraph_lines[0]):
@@ -54,6 +62,7 @@ def paragraphs(input_file='-', variables=None, jinja_env=None):
           yield '\n'.join(paragraph_lines)
         paragraph_lines = [raw_line]
 
+    # Header starts.
     elif line.startswith('#'):
       if len(paragraph_lines) == 1 and class_re.match(paragraph_lines[0]):
         paragraph_lines.append(raw_line)
@@ -63,13 +72,16 @@ def paragraphs(input_file='-', variables=None, jinja_env=None):
         paragraph_lines = [raw_line]
       is_paragraph_done = True
 
+    # Non-empty lines are just appended to the current paragraph.
     elif raw_line:
       paragraph_lines.append(raw_line)
 
-    else:  # raw_line is empty.
+    # Empty line means the paragraph ended so yield it.
+    else:
       if paragraph_lines:
         yield '\n'.join(paragraph_lines)
         paragraph_lines = []
 
+  # Yield any remaining paragraph that wasn't triggered to yield before.
   if paragraph_lines:
     yield '\n'.join(paragraph_lines)

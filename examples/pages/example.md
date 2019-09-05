@@ -30,16 +30,8 @@ Here is a code sample:
 {% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}
 ```
 
-```java
-{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/HelloWorld.java tag:hello_world %}
-```
-
-```go
-{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}
-```
-
 {:.language-py}
-<table align="left">
+<table>
   <td>
     <a target="_blank" class="button"
         href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-py.ipynb">
@@ -55,9 +47,14 @@ Here is a code sample:
     </a>
   </td>
 </table>
+<br>
+
+```java
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/HelloWorld.java tag:hello_world %}
+```
 
 {:.language-java}
-<table align="left">
+<table>
   <td>
     <a target="_blank" class="button"
         href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-java.ipynb">
@@ -73,9 +70,14 @@ Here is a code sample:
     </a>
   </td>
 </table>
+<br>
+
+```go
+{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.go tag:hello_world %}
+```
 
 {:.language-go}
-<table align="left">
+<table>
   <td>
     <a target="_blank" class="button"
         href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-go.ipynb">
@@ -91,6 +93,7 @@ Here is a code sample:
     </a>
   </td>
 </table>
+<br>
 
 You are all done!
 
