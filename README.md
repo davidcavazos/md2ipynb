@@ -4,6 +4,9 @@ Markdown to Jupyter Notebook converter.
 
 ## Minimal example
 
+* source: [example.md](examples/pages/example.md)
+* code: [hello-world.py](examples/code/hello-world.py)
+
 Here is a minimal example on how to convert a Markdown file.
 By default, the output is printed into `stdout`.
 
@@ -36,6 +39,12 @@ Here is the generated notebook on GitHub and Colab.
 <br/>
 
 ## Example
+
+* source: [example.md](examples/pages/example.md)
+* code: [hello-world.py](examples/code/hello-world.py)
+* import: [license.md](examples/templates/license.md)
+* import: [setup-py.md](examples/templates/setup-py.md)
+* import: [cleanup.md](examples/templates/cleanup.md)
 
 Here is a more complete example on specifying an output path, import sections,
 variables, as well as more metadata for a Colab visualization.
