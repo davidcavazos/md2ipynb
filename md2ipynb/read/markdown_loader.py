@@ -18,6 +18,13 @@
 import html2md
 import jinja2
 import os
+import re
+
+code_block_re = re.compile(
+    r'''^((?:{:\s*[^}]+})?```)  # group 1: initial ``` OR {:.class}```
+        ((?:(?!(?:```$)).)*?)   # group 2: everything until \n```
+        \n?```$                 # ending ```                               ''',
+    re.MULTILINE | re.DOTALL | re.VERBOSE)
 
 
 class MarkdownLoader(jinja2.BaseLoader):
@@ -32,4 +39,9 @@ class MarkdownLoader(jinja2.BaseLoader):
     mtime = os.path.getmtime(path)
     with open(path) as f:
       source = html2md.convert(f.read())
+
+    # Normalize inline code block finish backticks into next line, example:
+    # ```
+    # {% github_sample path/to/file tag:tag % }```
+    source = code_block_re.sub(r'\1\2\n```', source)
     return source, path, lambda: mtime == os.path.getmtime(path)
