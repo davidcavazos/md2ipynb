@@ -17,6 +17,7 @@
 
 import jinja2
 import json
+import tempfile
 import unittest
 
 from unittest.mock import patch
@@ -41,6 +42,8 @@ class MarkdownLoaderTest(unittest.TestCase):
     self.assertEqual(expected, actual)
 
   def test_from_file_html(self):
+    with open('test/hello-html-expected.md') as f:
+      expected = f.read().strip()
     template = env.get_template('test/hello.html')
     actual = template.render(variables)
     self.assertEqual(expected, actual)
@@ -59,7 +62,7 @@ class MarkdownLoaderTest(unittest.TestCase):
     self.assertEqual(expected, actual)
 
   def test_include_searchpath(self):
-    env = jinja2.Environment(loader=MarkdownLoader('examples/templates'),
+    env = jinja2.Environment(loader=MarkdownLoader('test/'),
                              extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
         "{% include 'title.md' %}",
@@ -77,3 +80,38 @@ class MarkdownLoaderTest(unittest.TestCase):
     template = env.from_string("{% include 'non-existent-file.md' %}")
     with self.assertRaises(jinja2.exceptions.TemplateNotFound):
       template.render()
+
+  def test_code_block(self):
+    expected = '\n'.join([
+        '```',
+        "# Hello world in Python.",
+        "print('Hello from Python!')",
+        '```',
+    ])
+    with tempfile.NamedTemporaryFile('w') as f:
+      f.write('\n'.join([
+        '```',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
+        '```',
+      ]))
+      f.seek(0)
+      template = env.get_template(f.name)
+    actual = template.render()
+    self.assertEqual(expected, actual)
+
+  def test_code_block_ending_inline(self):
+    expected = '\n'.join([
+        '```',
+        "# Hello world in Python.",
+        "print('Hello from Python!')",
+        '```',
+    ])
+    with tempfile.NamedTemporaryFile('w') as f:
+      f.write('\n'.join([
+        '```',
+        '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}```',
+      ]))
+      f.seek(0)
+      template = env.get_template(f.name)
+    actual = template.render()
+    self.assertEqual(expected, actual)

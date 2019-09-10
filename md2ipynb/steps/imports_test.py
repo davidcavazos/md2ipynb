@@ -65,8 +65,8 @@ class ImportsTest(unittest.TestCase):
     actual = list(imports(
         sections=[['# section 1'], ['# section 2']],
         imports={
-            0: ['examples/templates/title.md'],
-            -1: ['examples/templates/cleanup.md'],
+            0: ['test/title.md'],
+            -1: ['test/cleanup.md'],
         },
         variables={'title': 'Title'},
     ))

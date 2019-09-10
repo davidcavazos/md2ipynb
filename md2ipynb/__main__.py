@@ -51,7 +51,7 @@ def main(argv=None):
       help='File(s) to import at a certain section index. '
            'Sections are delimited by headers. '
            'Negative indices start from the last section. '
-           'Must be in the format "path/to/file.md:index"'
+           'Must be in the format "path/to/file.md:index". '
            'Examples: "templates/setup.md:0" "templates/cleanup.md:-1"',
   )
 

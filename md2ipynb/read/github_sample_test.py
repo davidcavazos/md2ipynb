@@ -47,9 +47,7 @@ class GithubSampleExtTest(unittest.TestCase):
 
 class ExtractSnippetTest(unittest.TestCase):
   def test_extract_snippet(self):
-    expected = '\n'.join([
-        "print('Hello')",
-    ])
+    expected = "print('Hello')"
     actual = extract_snippet(
         source='\n'.join([
             '# Extract snippet',
