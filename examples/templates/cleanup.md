@@ -12,4 +12,4 @@ limitations under the License.
 
 ## Clean up
 
-You're all done 🎉🎉
+{{ end_message }}

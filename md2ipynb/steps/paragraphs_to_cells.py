@@ -34,7 +34,7 @@ def paragraphs_to_cells(paragraphs):
     while True:
       numbered = '{}-{}'.format(name, i)
       if numbered not in used_ids:
-        used_ids.add(name)
+        used_ids.add(numbered)
         return numbered
       i += 1
 
@@ -60,9 +60,13 @@ def paragraphs_to_cells(paragraphs):
             metadata={'id': cell_id(last_header)},
         )
         contents = []
+      source = '\n'.join(lines[1:-1])
+      metadata={'id': cell_id(last_header + '-code')}
+      if '#@title' in source or '#@param' in source:
+        metadata.update({'cellView': 'form'})
       yield nbformat.v4.new_code_cell(
-          source='\n'.join(lines[1:-1]),
-          metadata={'id': cell_id(last_header + '-code')},
+          source=source,
+          metadata=metadata,
       )
     else:
       contents.append(paragraph)

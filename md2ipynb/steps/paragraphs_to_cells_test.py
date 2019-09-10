@@ -21,12 +21,18 @@ import unittest
 from . import paragraphs_to_cells
 
 
-def md_cell(source, id=''):
-  return nbformat.v4.new_markdown_cell(source, metadata={'id': id})
+def md_cell(source, id='', metadata=None):
+  cell_metadata = {'id': id}
+  if metadata:
+    cell_metadata.update(metadata)
+  return nbformat.v4.new_markdown_cell(source, metadata=cell_metadata)
 
 
-def code_cell(source, id=''):
-  return nbformat.v4.new_code_cell(source, metadata={'id': id})
+def code_cell(source, id='', metadata=None):
+  cell_metadata = {'id': id}
+  if metadata:
+    cell_metadata.update(metadata)
+  return nbformat.v4.new_code_cell(source, metadata=cell_metadata)
 
 
 class ParagraphsToCellsTest(unittest.TestCase):
@@ -73,6 +79,7 @@ class ParagraphsToCellsTest(unittest.TestCase):
         code_cell('code 2', 'h2-sym-_-bols-code'),
         md_cell('line 3', 'h2-sym-_-bols-2'),
         code_cell('code 3', 'h2-sym-_-bols-code-2'),
+        code_cell('code 4', 'h2-sym-_-bols-code-3'),
     ]
     actual = list(paragraphs_to_cells([
         'line 0',
@@ -85,5 +92,19 @@ class ParagraphsToCellsTest(unittest.TestCase):
         '```\ncode 2\n```',
         'line 3',
         '```\ncode 3\n```',
+        '```\ncode 4\n```',
+    ]))
+    self.assertEqual(expected, actual)
+
+  def test_code_cell_form_view(self):
+    expected = [
+        code_cell('code', '_-code'),
+        code_cell('#@title Title', '_-code-2', {'cellView': 'form'}),
+        code_cell('x = 42 #@param', '_-code-3', {'cellView': 'form'}),
+    ]
+    actual = list(paragraphs_to_cells([
+        '```\ncode\n```',
+        '```\n#@title Title\n```',
+        '```\nx = 42 #@param\n```',
     ]))
     self.assertEqual(expected, actual)

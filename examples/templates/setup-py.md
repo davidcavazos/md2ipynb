@@ -24,9 +24,9 @@ source env/bin/activate
 Install the `{{ package }}` package.
 
 ```bash
-pip install -q -U {{ package }}
+pip install -U {{ package }}
 ```
 
 ```powershell
-python -m pip install {{ package }}
+python -m pip install -U {{ package }}
 ```

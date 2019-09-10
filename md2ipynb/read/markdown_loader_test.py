@@ -62,7 +62,7 @@ class MarkdownLoaderTest(unittest.TestCase):
     self.assertEqual(expected, actual)
 
   def test_include_searchpath(self):
-    env = jinja2.Environment(loader=MarkdownLoader('examples/templates'),
+    env = jinja2.Environment(loader=MarkdownLoader('test/'),
                              extensions=[GithubSampleExt])
     template = env.from_string('\n'.join([
         "{% include 'title.md' %}",
