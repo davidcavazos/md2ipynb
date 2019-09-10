@@ -63,6 +63,8 @@ md2ipynb examples/pages/example.md \
     --github-ipynb-url https://github.com/davidcavazos/md2ipynb/blob/master/examples/notebooks/example.ipynb
 ```
 
+> *Note:* For more information on the available options, run `md2ipynb --help`.
+
 Here is the generated notebook on GitHub and Colab.
 Note that since we specified the `--github-ipynb-url`,
 there is now an "Open in Colab" button in the GitHub ipynb file.
@@ -82,3 +84,8 @@ there is now an "Open in Colab" button in the GitHub ipynb file.
   </td>
 </table>
 <br/>
+
+## Contributing
+
+Contributions are welcome! For instructions on how to contribute,
+please check the [Contribution guide](CONTRIBUTING.md).
