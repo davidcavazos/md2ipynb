@@ -28,14 +28,14 @@ def code_cell(source, id=''):
   return nbformat.v4.new_code_cell(source, metadata={'id': id})
 
 
-class ViewTheDocsTest(unittest.TestCase):
+class OpenInColabTest(unittest.TestCase):
   def test_open_in_colab(self):
     expected = [
         md_cell(
             '<a href="https://colab.research.google.com/github/user/repo/blob/master/notebook.ipynb" target="_parent">'
-              '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" />'
+              '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/>'
             '</a>',
-            id='open-in-colab',
+            id='view-in-github',
         ),
         md_cell('content', id='H1'),
     ]

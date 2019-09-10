@@ -26,9 +26,9 @@ def open_in_colab(cells, ipynb_github_url=None, **kwargs):
       ipynb_github_url = ipynb_github_url[len('github.com/'):]
     yield nbformat.v4.new_markdown_cell(
         '<a href="https://colab.research.google.com/github/{}" target="_parent">'
-          '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" />'
+          '<img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab"/>'
         '</a>'.format(ipynb_github_url),
-        metadata={'id': 'open-in-colab'},
+        metadata={'id': 'view-in-github'},
     )
 
   for cell in cells:

@@ -47,7 +47,7 @@ Hello from Python!
 <table>
   <td>
     <a target="_blank" class="button"
-        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-py.ipynb">
+        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/example.ipynb">
       <img src="https://www.tensorflow.org/images/colab_logo_32px.png" width="20px" height="20px" />
       Run in Colab
     </a>
@@ -78,7 +78,7 @@ Hello from Java!
 <table>
   <td>
     <a target="_blank" class="button"
-        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-java.ipynb">
+        href="https://colab.research.google.com/github//davidcavazos/md2ipynb/blob/master/examples/notebooks/example.ipynb">
       <img src="https://www.tensorflow.org/images/colab_logo_32px.png" width="20px" height="20px" />
       Run in Colab
     </a>
@@ -109,7 +109,7 @@ Hello from Java!
 <table>
   <td>
     <a target="_blank" class="button"
-        href="https://colab.research.google.com/github/davidcavazos/md2ipynb/blob/master/examples/notebooks/hello-world-go.ipynb">
+        href="https://colab.research.google.com/github/davidcavazos/md2ipynb/blob/master/examples/notebooks/example.ipynb">
       <img src="https://www.tensorflow.org/images/colab_logo_32px.png" width="20px" height="20px" />
       Run in Colab
     </a>
@@ -145,6 +145,8 @@ Or, a code cell containing `#@param`.
 
 ```
 message = "Hello!" #@param {type:"string"}
+
+print(f"message: {repr(message)}")
 ```
 
 ## What's next
