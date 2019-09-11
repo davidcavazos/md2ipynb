@@ -14,18 +14,24 @@ limitations under the License.
 
 ## Setup
 
+{: .virtualenv}
 Create a virtual environment.
 
-```bash
+{: .virtualenv}
+```sh
 virtualenv env
 source env/bin/activate
 ```
 
+{: .shell-sh}
 Install the `{{ package }}` package.
 
-```bash
+```sh
 pip install -U {{ package }}
 ```
+
+{: .shell-powershell}
+Install the `{{ package }}` package in PowerShell.
 
 ```powershell
 python -m pip install -U {{ package }}

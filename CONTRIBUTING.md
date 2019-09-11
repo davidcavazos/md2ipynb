@@ -31,10 +31,10 @@ source env/bin/activate
 
 > **Note**: Once you are all done, you can deactivate it by running `deactivate`.
 
-Install the requirements.
+Install the package in "editable" (development) mode.
 
 ```sh
-pip install -U -r requirements.txt
+pip install -e .
 ```
 
 ## Modifying the code
