@@ -38,7 +38,7 @@ def filter_classes(paragraphs, keep_classes=None):
     # Check for a code block '```class' both as 'class' and 'language-class'.
     if paragraph.startswith('```') and paragraph.endswith('```'):
       lang = paragraph.splitlines()[0].lstrip('`').strip()
-      possible_classes = {lang, 'language-' + lang}
+      possible_classes = {lang, 'language-' + lang, 'shell-' + lang}
       if lang and not keep_classes.intersection(possible_classes):
         continue
 
