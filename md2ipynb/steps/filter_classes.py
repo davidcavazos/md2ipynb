@@ -17,10 +17,13 @@
 
 from md2ipynb.util import class_re
 
+SHELLS = {'sh', 'bash'}
+
 
 def filter_classes(paragraphs, keep_classes=None):
   if keep_classes is None:
-    keep_classes = {'language-py', 'shell-sh'}
+    keep_classes = {'language-py'}
+    keep_classes.update({'shell-' + shell for shell in SHELLS})
   elif isinstance(keep_classes, str):
     keep_classes = {keep_classes}
   else:
@@ -37,10 +40,15 @@ def filter_classes(paragraphs, keep_classes=None):
 
     # Check for a code block '```class' both as 'class' and 'language-class'.
     if paragraph.startswith('```') and paragraph.endswith('```'):
-      lang = paragraph.splitlines()[0].lstrip('`').strip()
+      lines = paragraph.splitlines()
+      lang = lines[0].lstrip('`').strip()
       possible_classes = {lang, 'language-' + lang, 'shell-' + lang}
       if lang and not keep_classes.intersection(possible_classes):
         continue
+      if lang in SHELLS:
+        for i in range(1, len(lines)-1):
+          lines[i] = '!' + lines[i]
+        paragraph = '\n'.join(lines)
 
     # If we're still here and the paragraph is not empty, yield it.
     if paragraph:
