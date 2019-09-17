@@ -28,7 +28,7 @@ def view_the_docs(cells, docs_url=None, docs_logo_url=None):
         '<table align="left">'
           '<td>'
             '<a target="_blank" href="{}">'
-              '{}View the Docs'
+              '{}View the docs'
             '</a>'
           '</td>'
         '</table>'
