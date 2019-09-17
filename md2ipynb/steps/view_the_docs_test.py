@@ -36,7 +36,7 @@ class ViewTheDocsTest(unittest.TestCase):
             '<table align="left">'
               '<td>'
                 '<a target="_blank" href="www.docs-url.com">'
-                  'View the Docs'
+                  'View the docs'
                 '</a>'
               '</td>'
             '</table>',
@@ -47,7 +47,7 @@ class ViewTheDocsTest(unittest.TestCase):
             '<table align="left">'
               '<td>'
                 '<a target="_blank" href="www.docs-url.com">'
-                  'View the Docs'
+                  'View the docs'
                 '</a>'
               '</td>'
             '</table>',
@@ -67,7 +67,7 @@ class ViewTheDocsTest(unittest.TestCase):
               '<td>'
                 '<a target="_blank" href="www.docs-url.com">'
                   '<img src="www.docs-url.com/logo.png" width="32" height="32" />'
-                  'View the Docs'
+                  'View the docs'
                 '</a>'
               '</td>'
             '</table>',
@@ -79,7 +79,7 @@ class ViewTheDocsTest(unittest.TestCase):
               '<td>'
                 '<a target="_blank" href="www.docs-url.com">'
                   '<img src="www.docs-url.com/logo.png" width="32" height="32" />'
-                  'View the Docs'
+                  'View the docs'
                 '</a>'
               '</td>'
             '</table>',
