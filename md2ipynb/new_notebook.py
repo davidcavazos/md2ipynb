@@ -24,6 +24,7 @@ def new_notebook(
     input_file,
     variables=None,
     imports=None,
+    include_dir=None,
     notebook_title=None,
     keep_classes=None,
     shell=None,
@@ -32,7 +33,6 @@ def new_notebook(
     github_ipynb_url=None,
     kernel='python3',
     steps=None,
-    include_dir=None,
     jinja_env=None,
 ):
 

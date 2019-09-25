@@ -27,7 +27,7 @@ def paragraphs(input_file='-', variables=None, include_dir=None, jinja_env=None)
   in_code_block = False
   paragraph_lines = []
 
-  for raw_line in lines(input_file, variables, jinja_env):
+  for raw_line in lines(input_file, variables, include_dir, jinja_env):
     # `raw_line` is the unmodified line.
     # `line` has the paragraph class {: .class} removed if any.
     line = class_re.sub('', raw_line)

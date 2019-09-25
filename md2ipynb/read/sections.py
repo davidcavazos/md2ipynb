@@ -21,7 +21,7 @@ from . import paragraphs
 def sections(input_file='-', variables=None, include_dir=None, jinja_env=None, start_on_header=True):
   header_found = False
   section = []
-  for paragraph in paragraphs(input_file, variables, jinja_env):
+  for paragraph in paragraphs(input_file, variables, include_dir, jinja_env):
     if paragraph[0].startswith('#'):
       if section and (not start_on_header or header_found):
         yield section
