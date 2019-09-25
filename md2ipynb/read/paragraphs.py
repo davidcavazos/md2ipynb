@@ -22,7 +22,7 @@ from md2ipynb.util import class_re
 from . import lines
 
 
-def paragraphs(input_file='-', variables=None, jinja_env=None):
+def paragraphs(input_file='-', variables=None, include_dir=None, jinja_env=None):
   is_paragraph_done = False
   in_code_block = False
   paragraph_lines = []

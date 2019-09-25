@@ -35,6 +35,14 @@ with open(variables_file) as f:
 
 env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
 
+
+def render_string(source, variables=None, env=env):
+  with tempfile.NamedTemporaryFile('w') as f:
+    f.write(source)
+    f.seek(0)
+    template = env.get_template(f.name)
+  return template.render(variables or {})
+
 class MarkdownLoaderTest(unittest.TestCase):
   def test_from_file_markdown(self):
     template = env.get_template('test/hello.md')
@@ -49,7 +57,7 @@ class MarkdownLoaderTest(unittest.TestCase):
     self.assertEqual(expected, actual)
 
   def test_include(self):
-    template = env.from_string('\n'.join([
+    actual = render_string('\n'.join([
         "{% include 'test/title.md' %}",
         '',
         'Hello {{name}}!',
@@ -57,14 +65,13 @@ class MarkdownLoaderTest(unittest.TestCase):
         '```py',
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
-    ]))
-    actual = template.render(variables)
+    ]), variables)
     self.assertEqual(expected, actual)
 
   def test_include_searchpath(self):
     env = jinja2.Environment(loader=MarkdownLoader('test/'),
                              extensions=[GithubSampleExt])
-    template = env.from_string('\n'.join([
+    actual = render_string('\n'.join([
         "{% include 'title.md' %}",
         '',
         'Hello {{name}}!',
@@ -72,8 +79,7 @@ class MarkdownLoaderTest(unittest.TestCase):
         '```py',
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
-    ]))
-    actual = template.render(variables)
+    ]), variables, env)
     self.assertEqual(expected, actual)
 
   def test_include_not_found(self):
@@ -88,15 +94,11 @@ class MarkdownLoaderTest(unittest.TestCase):
         "print('Hello from Python!')",
         '```',
     ])
-    with tempfile.NamedTemporaryFile('w') as f:
-      f.write('\n'.join([
+    actual = render_string('\n'.join([
         '```',
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}',
         '```',
-      ]))
-      f.seek(0)
-      template = env.get_template(f.name)
-    actual = template.render()
+    ]))
     self.assertEqual(expected, actual)
 
   def test_code_block_ending_inline(self):
@@ -106,12 +108,43 @@ class MarkdownLoaderTest(unittest.TestCase):
         "print('Hello from Python!')",
         '```',
     ])
-    with tempfile.NamedTemporaryFile('w') as f:
-      f.write('\n'.join([
+    actual = render_string('\n'.join([
         '```',
         '{% github_sample /davidcavazos/md2ipynb/blob/master/examples/code/hello-world.py tag:hello_world %}```',
-      ]))
-      f.seek(0)
-      template = env.get_template(f.name)
-    actual = template.render()
+    ]))
+    self.assertEqual(expected, actual)
+
+  def test_jekyll_liquid_include_static(self):
+    expected = '\n'.join([
+        '# Include static',
+        '# Include static',
+    ])
+    actual = render_string('\n'.join([
+        '{% include test/include-static.md %}',
+        '{% include "test/include-static.md" %}',
+    ]))
+    self.assertEqual(expected, actual)
+
+  def test_jekyll_liquid_include_argument(self):
+    expected = '\n'.join([
+        '# Include argument',
+        '# Include argument',
+    ])
+    actual = render_string('\n'.join([
+        '{% include test/include-argument.md title="Include argument" %}',
+        '{% include "test/include-argument.md" title="Include argument" %}',
+    ]))
+    self.assertEqual(expected, actual)
+
+  def test_jekyll_liquid_include_argument_variable(self):
+    expected = '\n'.join([
+        '',
+        '# Include argument variable',
+        '# Include argument variable',
+    ])
+    actual = render_string('\n'.join([
+        '{% capture var %}Include argument variable{% endcapture %}',
+        '{% include test/include-argument.md title=var %}',
+        '{% include "test/include-argument.md" title=var %}',
+    ]))
     self.assertEqual(expected, actual)

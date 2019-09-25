@@ -25,7 +25,7 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="md2ipynb",
-    version="0.1.2",
+    version="0.1.3",
     author="David Cavazos",
     author_email="dcavazosw@gmail.com",
     description="Markdown to Jupyter Notebook converter.",

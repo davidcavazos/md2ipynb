@@ -56,6 +56,12 @@ def main(argv=None):
   )
 
   parser.add_argument(
+      '--include-dir',
+      default='.',
+      help='Path to look for {% include file %} templates.',
+  )
+
+  parser.add_argument(
       '--keep-classes',
       nargs='+',
       help='Paragraph classes to keep, any other classes will be filtered out. '
@@ -114,6 +120,7 @@ def main(argv=None):
       args.input_file,
       variables=variables,
       imports=imports,
+      include_dir=args.include_dir,
       keep_classes=args.keep_classes,
       notebook_title=args.notebook_title,
       docs_url=args.docs_url,
