@@ -24,9 +24,12 @@ from . import MarkdownLoader
 from . import GithubSampleExt
 
 
-def lines(input_file='-', variables=None, jinja_env=None):
+def lines(input_file='-', variables=None, include_dir=None, jinja_env=None):
   if not jinja_env:
-    jinja_env = jinja2.Environment(loader=MarkdownLoader(), extensions=[GithubSampleExt])
+    jinja_env = jinja2.Environment(
+        loader=MarkdownLoader(include_dir or '.'),
+        extensions=[GithubSampleExt],
+    )
 
   # Read from a file, stdin or an iterable without any trailing newlines.
   if isinstance(input_file, str):

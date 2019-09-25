@@ -32,12 +32,13 @@ def new_notebook(
     github_ipynb_url=None,
     kernel='python3',
     steps=None,
+    include_dir=None,
     jinja_env=None,
 ):
 
-  sections = md2ipynb.read.sections(input_file, variables, jinja_env)
+  sections = md2ipynb.read.sections(input_file, variables, include_dir, jinja_env)
   paragraphs = md2ipynb.apply(sections, [
-      (md2ipynb.steps.imports, imports, variables, jinja_env),
+      (md2ipynb.steps.imports, imports, variables, include_dir, jinja_env),
       md2ipynb.steps.flatten,
       (md2ipynb.steps.filter_classes, keep_classes)
   ])

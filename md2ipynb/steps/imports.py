@@ -20,10 +20,10 @@ import jinja2
 from md2ipynb import read
 
 
-def imports(sections, imports=None, variables=None, jinja_env=None):
+def imports(sections, imports=None, variables=None, include_dir=None, jinja_env=None):
   def sections_from_imports(import_index):
     for input_file in imports[import_index]:
-      for import_section in read.sections(input_file, variables, jinja_env):
+      for import_section in read.sections(input_file, variables, include_dir, jinja_env):
         yield import_section
 
   sections = list(sections)

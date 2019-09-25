@@ -18,8 +18,7 @@
 from . import paragraphs
 
 
-def sections(input_file='-', variables=None, jinja_env=None, start_on_header=True):
-
+def sections(input_file='-', variables=None, include_dir=None, jinja_env=None, start_on_header=True):
   header_found = False
   section = []
   for paragraph in paragraphs(input_file, variables, jinja_env):
