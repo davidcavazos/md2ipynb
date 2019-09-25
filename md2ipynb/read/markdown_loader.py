@@ -22,8 +22,8 @@ import re
 
 
 class MarkdownLoader(jinja2.BaseLoader):
-  def __init__(self, searchpath='.'):
-    self.searchpath = searchpath
+  def __init__(self, searchpath=None):
+    self.searchpath = searchpath or '.'
 
   def get_source(self, env, name):
     path = os.path.join(self.searchpath, name)

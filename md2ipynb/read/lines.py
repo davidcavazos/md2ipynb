@@ -27,7 +27,7 @@ from . import GithubSampleExt
 def lines(input_file='-', variables=None, include_dir=None, jinja_env=None):
   if not jinja_env:
     jinja_env = jinja2.Environment(
-        loader=MarkdownLoader(include_dir or '.'),
+        loader=MarkdownLoader(include_dir),
         extensions=[GithubSampleExt],
     )
 
