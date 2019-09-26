@@ -38,6 +38,7 @@ class MarkdownLoader(jinja2.BaseLoader):
       source = html2md.convert(source)
 
     # Normalize source code before applying any templating logic.
+    source = remove_html_comments(source)
     source = normalize_inline_code_block(source)
     source = jekyll_liquid_capture(source)
     source = jekyll_liquid_include(source)
@@ -54,12 +55,25 @@ def replace(source, regex, fn):
   return source
 
 
+def remove_html_comments(source):
+  html_comments_re = re.compile(r'''
+      (\s*)?                # 0: whitespaces before
+      <!--(?:(?!-->).)*-->  # <!-- comment -->
+      (\s*)?                # 1: whitespaces after
+  ''', re.VERBOSE | re.DOTALL)
+  def fn(m):
+    if '\n' in (m[0] or '') + (m[1] or ''):
+      return '\n'
+    return ' '
+  return replace(source, html_comments_re, fn).strip('\n')
+
+
 def normalize_inline_code_block(source):
   code_block_re = re.compile(r'''
       ^((?:{:\s*[^}]+})?```)  # group 1: initial ``` OR {:.class}```
       ((?:(?!(?:```$)).)*?)   # group 2: everything until \n```
       \n?```$                 # ending ```
-  ''', re.MULTILINE | re.DOTALL | re.VERBOSE)
+  ''', re.VERBOSE | re.MULTILINE | re.DOTALL)
 
   # Normalize inline code block finish backticks into next line, example:
   # ```

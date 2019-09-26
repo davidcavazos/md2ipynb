@@ -194,3 +194,19 @@ class FilterClassesTest(unittest.TestCase):
         keep_classes='classA',
     ))
     self.assertEqual(expected, actual)
+
+  def test_force_filter(self):
+    expected = [
+        'classA',
+    ]
+    actual = list(filter_classes(
+        paragraphs=[
+            '{:.classA}\nclassA',
+            '{:.classB}\nclassB',
+            '{:.classA .classB}\nclassA classB',
+            '{:.classB .classA}\nclassB classA',
+        ],
+        keep_classes='classA',
+        force_filter='classB',
+    ))
+    self.assertEqual(expected, actual)
