@@ -23,6 +23,8 @@ from jinja2 import lexer
 from jinja2 import nodes
 from jinja2.ext import Extension
 
+github_file_cache = {}
+
 
 class GithubSampleExt(Extension):
   # Format: /<owner>/<repo>/blob/<branch>/<path>
@@ -67,10 +69,15 @@ class GithubSampleExt(Extension):
   def _github_sample(self, owner, repo, branch, path, tag, caller):
     url = 'https://raw.githubusercontent.com/{}/{}/{}/{}'.format(
         owner, repo, branch, path)
-    req = requests.get(url, params={'ref': branch})
-    assert req.status_code == requests.codes.ok, '{} {}, contents:\n{}'.format(
-        req, url, req.text)
-    return extract_snippet(req.text, tag)
+    if url in github_file_cache:
+      github_file = github_file_cache[url]
+    else:
+      req = requests.get(url, params={'ref': branch})
+      assert req.status_code == requests.codes.ok, '{} {}, contents:\n{}'.format(
+          req, url, req.text)
+      github_file = req.text
+      github_file_cache[url] = github_file
+    return extract_snippet(github_file, tag)
 
 
 def extract_snippet(source, tag):
