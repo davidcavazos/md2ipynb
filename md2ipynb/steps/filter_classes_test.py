@@ -22,8 +22,6 @@ from md2ipynb import testing
 
 from . import filter_classes
 
-# TODO: Add tests for multiple classes {: .class1 .class2 .class3 }
-
 
 def get_paragraphs(class_names):
   def get_paragraphs_fn(test_file):
@@ -178,4 +176,21 @@ class FilterClassesTest(unittest.TestCase):
         'test/classes-AB-expected.md',
         get_paragraphs(['classA', 'classB']),
     )
+    self.assertEqual(expected, actual)
+
+  def test_multiple_classes(self):
+    expected = [
+        'classA',
+        'classA classB',
+        'classB classA',
+    ]
+    actual = list(filter_classes(
+        paragraphs=[
+            '{:.classA}\nclassA',
+            '{:.classB}\nclassB',
+            '{:.classA .classB}\nclassA classB',
+            '{:.classB .classA}\nclassB classA',
+        ],
+        keep_classes='classA',
+    ))
     self.assertEqual(expected, actual)
