@@ -27,6 +27,7 @@ def new_notebook(
     include_dir=None,
     notebook_title=None,
     keep_classes=None,
+    filter_classes=None,
     shell=None,
     docs_url=None,
     docs_logo_url=None,
@@ -40,7 +41,7 @@ def new_notebook(
   paragraphs = md2ipynb.apply(sections, [
       (md2ipynb.steps.imports, imports, variables, include_dir, jinja_env),
       md2ipynb.steps.flatten,
-      (md2ipynb.steps.filter_classes, keep_classes)
+      (md2ipynb.steps.filter_classes, keep_classes, filter_classes),
   ])
   paragraphs = md2ipynb.apply(paragraphs, steps)
   cells = list(md2ipynb.apply(paragraphs, [

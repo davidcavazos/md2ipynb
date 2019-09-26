@@ -87,6 +87,27 @@ class MarkdownLoaderTest(unittest.TestCase):
     with self.assertRaises(jinja2.exceptions.TemplateNotFound):
       template.render()
 
+  def test_remove_html_comments(self):
+    expected = '\n'.join([
+        'line 1',
+        'line 2',
+        'line 3',
+    ])
+    actual = render_string('\n'.join([
+        '<!-- single line comment -->',
+        'line 1',
+        'line <!-- embedded comment --> 2',
+        '<!--',
+        'multi',
+        'line',
+        'comment',
+        '-->',
+        'line 3',
+        '<!-- ending comment -->',
+    ]))
+    self.assertEqual(expected, actual)
+
+
   def test_code_block(self):
     expected = '\n'.join([
         '```',

@@ -72,6 +72,16 @@ def main(argv=None):
   )
 
   parser.add_argument(
+      '--filter-classes',
+      nargs='+',
+      help='Paragraph classes to filter out. '
+           'This overrides classes set with --keep-classes. '
+           "Format of a class is '{: .className}',"
+           'which can be at the beginning or the end of the paragraph, '
+           'or a line before or after.',
+  )
+
+  parser.add_argument(
       '--notebook-title',
       help='Notebook title to show on Colab.',
   )
@@ -122,6 +132,7 @@ def main(argv=None):
       imports=imports,
       include_dir=args.include_dir,
       keep_classes=args.keep_classes,
+      filter_classes=args.filter_classes,
       notebook_title=args.notebook_title,
       docs_url=args.docs_url,
       docs_logo_url=args.docs_logo_url,

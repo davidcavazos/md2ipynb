@@ -20,7 +20,7 @@ from md2ipynb import util
 SHELLS = {'sh', 'bash'}
 
 
-def filter_classes(paragraphs, keep_classes=None):
+def filter_classes(paragraphs, keep_classes=None, force_filter=None):
   if keep_classes is None:
     keep_classes = {'language-py'}
     keep_classes.update({'shell-' + shell for shell in SHELLS})
@@ -29,10 +29,19 @@ def filter_classes(paragraphs, keep_classes=None):
   else:
     keep_classes = set(keep_classes)
 
+  if force_filter is None:
+    force_filter = {}
+  elif isinstance(force_filter, str):
+    force_filter = {force_filter}
+  else:
+    force_filter = set(force_filter)
+
   for paragraph in paragraphs:
     # Check for a paragraph class '{: .class}'.
     attributes = util.parse_attributes(paragraph) or {}
     if 'class' in attributes:
+      if force_filter and len(set(attributes['class']) & force_filter) > 0:
+        continue
       if len(set(attributes['class']) & keep_classes) == 0:
         continue
       paragraph = util.attributes_re.sub('', paragraph).strip('\n')
