@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from md2ipynb.util import class_re
+from md2ipynb import util
 
 SHELLS = {'sh', 'bash'}
 
@@ -31,12 +31,11 @@ def filter_classes(paragraphs, keep_classes=None):
 
   for paragraph in paragraphs:
     # Check for a paragraph class '{: .class}'.
-    m = class_re.search(paragraph)
-    if m:
-      paragraph_class = m.group(1)
-      if paragraph_class not in keep_classes:
+    attributes = util.parse_attributes(paragraph) or {}
+    if 'class' in attributes:
+      if len(set(attributes['class']) & keep_classes) == 0:
         continue
-      paragraph = paragraph.replace(m.group(), '').strip('\n')
+      paragraph = util.attributes_re.sub('', paragraph).strip('\n')
 
     # Check for a code block '```class' both as 'class' and 'language-class'.
     if paragraph.startswith('```') and paragraph.endswith('```'):

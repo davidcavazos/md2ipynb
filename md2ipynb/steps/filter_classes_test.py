@@ -22,6 +22,8 @@ from md2ipynb import testing
 
 from . import filter_classes
 
+# TODO: Add tests for multiple classes {: .class1 .class2 .class3 }
+
 
 def get_paragraphs(class_names):
   def get_paragraphs_fn(test_file):

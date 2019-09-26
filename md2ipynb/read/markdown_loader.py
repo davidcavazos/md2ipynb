@@ -32,7 +32,10 @@ class MarkdownLoader(jinja2.BaseLoader):
 
     mtime = os.path.getmtime(path)
     with open(path) as f:
-      source = html2md.convert(f.read())
+      source = f.read()
+      if '<body>' not in source:
+        source = '<body>{}</body>'.format(source)
+      source = html2md.convert(source)
 
     # Normalize source code before applying any templating logic.
     source = normalize_inline_code_block(source)

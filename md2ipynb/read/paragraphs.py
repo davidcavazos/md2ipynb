@@ -17,7 +17,7 @@
 
 import re
 
-from md2ipynb.util import class_re
+from md2ipynb.util import attributes_re
 
 from . import lines
 
@@ -29,8 +29,8 @@ def paragraphs(input_file='-', variables=None, include_dir=None, jinja_env=None)
 
   for raw_line in lines(input_file, variables, include_dir, jinja_env):
     # `raw_line` is the unmodified line.
-    # `line` has the paragraph class {: .class} removed if any.
-    line = class_re.sub('', raw_line)
+    # `line` has custom attributes removed if any. {: #id .class attrib='value'}
+    line = attributes_re.sub('', raw_line)
 
     # If a paragraph is marked as done, check for a trailing
     # paragraph class {: class} and then yield the paragraph.
@@ -55,7 +55,7 @@ def paragraphs(input_file='-', variables=None, include_dir=None, jinja_env=None)
     # Code block starts.
     elif not in_code_block and line.startswith('```'):
       in_code_block = True
-      if len(paragraph_lines) == 1 and class_re.match(paragraph_lines[0]):
+      if len(paragraph_lines) == 1 and attributes_re.match(paragraph_lines[0]):
         paragraph_lines.append(raw_line)
       else:
         if paragraph_lines:
@@ -64,7 +64,7 @@ def paragraphs(input_file='-', variables=None, include_dir=None, jinja_env=None)
 
     # Header starts.
     elif line.startswith('#'):
-      if len(paragraph_lines) == 1 and class_re.match(paragraph_lines[0]):
+      if len(paragraph_lines) == 1 and attributes_re.match(paragraph_lines[0]):
         paragraph_lines.append(raw_line)
       else:
         if paragraph_lines:
