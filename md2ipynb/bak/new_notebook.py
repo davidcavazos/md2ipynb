@@ -15,9 +15,9 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import nbformat
-
+import jinja2
 import md2ipynb
+import nbformat
 
 
 def new_notebook(
@@ -34,7 +34,35 @@ def new_notebook(
     github_ipynb_url=None,
     kernel='python3',
     steps=None,
-    md_extensions=None,
+    jinja_env=None,
 ):
 
-    doc = md2ipynb.parse_markdown(input_file)
+  sections = md2ipynb.read.sections(input_file, variables, include_dir, jinja_env)
+  paragraphs = md2ipynb.apply(sections, [
+      (md2ipynb.steps.imports, imports, variables, include_dir, jinja_env),
+      md2ipynb.steps.flatten,
+      (md2ipynb.steps.filter_classes, keep_classes, filter_classes),
+  ])
+  paragraphs = md2ipynb.apply(paragraphs, steps)
+  cells = list(md2ipynb.apply(paragraphs, [
+      md2ipynb.steps.paragraphs_to_cells,
+      (md2ipynb.steps.view_the_docs, docs_url, docs_logo_url),
+      (md2ipynb.steps.open_in_colab, github_ipynb_url),
+  ]))
+
+  for cell in cells:
+    if notebook_title:
+      break
+    first_line = cell.source.splitlines()[0]
+    if first_line.startswith('#'):
+      notebook_title = first_line.strip('# ')
+
+  # Create the notebook with all the cells.
+  metadata = {
+    'colab': {"toc_visible": True},
+    'kernelspec': {'name': kernel, 'display_name': kernel},
+  }
+  if notebook_title:
+    metadata['colab']['name'] = notebook_title
+
+  return nbformat.v4.new_notebook(cells=cells, metadata=metadata)

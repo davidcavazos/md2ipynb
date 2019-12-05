@@ -1,0 +1,103 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements. See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership. The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+import re
+from typing import Iterable
+
+from .token import Token, TokenType
+
+
+class Tokenizer:
+    def __init__(self) -> None:
+        self.patterns = re.compile(
+            '|'.join(f"(?P<{name}>{pattern})" for name, pattern in [
+                # Patterns are evaluated in the order defined here,
+                # so more relaxed patterns should be at the bottom.
+                (TokenType.H6, r'######'),
+                (TokenType.H5, r'#####'),
+                (TokenType.H4, r'####'),
+                (TokenType.H3, r'###'),
+                (TokenType.H2, r'##'),
+                (TokenType.H1, r'#'),
+                (TokenType._HtmlCommentOpen, r'<!--'),
+                (TokenType.HtmlClose, r'</[^>]+>'),
+                (TokenType.HtmlOpen, r'<[^>]+>'),
+                (TokenType.Strike, r'~~'),
+                (TokenType.Asterisk, r'\*'),
+                (TokenType.Plus, r'\+'),
+                (TokenType.Dash, r'-'),
+                (TokenType.Underscore, r'_'),
+                (TokenType.GreaterThan, r'>'),
+                (TokenType.OrderedItem1, r'\d{1,9}\.'),
+                (TokenType.OrderedItem2, r'\d{1,9}\)'),
+                (TokenType._EOL, r'$'),
+            ]))
+
+    def tokenize(self, source: Iterable[str]) -> Iterable[Token]:
+        last_row_i = 0
+        last_col_i = 0
+        html_comment = None
+        line = ''
+        for row_i, line in enumerate(source):
+            line = line.rstrip('\n')
+
+            col_i = 0
+            while col_i < len(line):
+                # If it's an HTML comment, match everything until the close tag.
+                if html_comment is not None:
+                    close_tag = '-->'
+                    close_idx = line.find(close_tag, col_i)
+                    if close_idx > 0:
+                        close_idx += len(close_tag)
+                        html_comment.text += line[col_i:close_idx]
+                        yield html_comment
+                        col_i = close_idx
+                        html_comment = None
+                    else:
+                        html_comment.text += line[col_i:] + '\n'
+                        break
+
+                # Get the token_type and matched text for the match.
+                # There must be only 1 group matched in the regular expression.
+                m = self.patterns.search(line[col_i:])
+                assert m, f"must always match at least EOL: {repr(line)}"
+                matched_groups = [
+                    (token, text) for token, text in m.groupdict().items()
+                    if text is not None]
+                assert len(matched_groups) == 1, (
+                    f"must match exactly 1 group: "
+                    f"line={repr(line)} groups={m.groupdict()}")
+                token_type_name, text = matched_groups[0]
+                token_type = TokenType(token_type_name)
+
+                # If there is a gap between this match and the last one, yield
+                # that gap as a Text token.
+                if m.start() > 0:
+                    yield Token.Text(
+                        line[col_i:col_i+m.start()], line, row_i+1, col_i+1)
+                    col_i += m.start()
+
+                if token_type == TokenType._HtmlCommentOpen:
+                    html_comment = Token.HtmlComment(
+                        text, line, row_i+1, col_i+1)
+                elif token_type != TokenType._EOL:
+                    # Yield the matched token unless it's the End Of Line.
+                    yield Token(token_type, text, line, row_i+1, col_i+1)
+                col_i += len(text)
+                last_col_i = col_i
+            last_row_i = row_i
+        yield Token.EOF(line, last_row_i+1, last_col_i+1)

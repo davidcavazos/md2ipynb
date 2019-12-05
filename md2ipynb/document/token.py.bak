@@ -1,0 +1,174 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements. See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership. The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License. You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import Enum
+from typing import List
+
+
+class TokenType(Enum):
+    Text = 'Text'
+    H1 = 'H1'
+    H2 = 'H2'
+    H3 = 'H3'
+    H4 = 'H4'
+    H5 = 'H5'
+    H6 = 'H6'
+    HtmlOpen = 'HtmlOpen'
+    HtmlClose = 'HtmlClose'
+    HtmlComment = 'HtmlComment'
+    _HtmlCommentOpen = '_HtmlCommentOpen'
+    Asterisk = 'Asterisk'
+    Plus = 'Plus'
+    Dash = 'Dash'
+    Underscore = 'Underscore'
+    Strike = 'Strike'
+    GreaterThan = 'GreaterThan'
+    OrderedItem1 = 'OrderedItem1'
+    OrderedItem2 = 'OrderedItem2'
+    _EOL = '_EOL'  # End Of Line
+    EOF = 'EOF'
+
+    def __str__(self) -> str:
+        return str(self.value)
+
+
+@dataclass
+class Token:
+    type: TokenType
+    text: str
+    line: str
+    row: int
+    col: int
+
+    @staticmethod
+    def Text(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.Text, text, line, row, col)
+
+    @staticmethod
+    def H1(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.H1, text, line, row, col)
+
+    @staticmethod
+    def H2(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.H2, text, line, row, col)
+
+    @staticmethod
+    def H3(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.H3, text, line, row, col)
+
+    @staticmethod
+    def H4(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.H4, text, line, row, col)
+
+    @staticmethod
+    def H5(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.H5, text, line, row, col)
+
+    @staticmethod
+    def H6(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.H6, text, line, row, col)
+
+    @staticmethod
+    def HtmlOpen(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.HtmlOpen, text, line, row, col)
+
+    @staticmethod
+    def HtmlClose(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.HtmlClose, text, line, row, col)
+
+    @staticmethod
+    def HtmlComment(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.HtmlClose, text, line, row, col)
+
+    @staticmethod
+    def Asterisk(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.Asterisk, text, line, row, col)
+
+    @staticmethod
+    def Plus(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.Plus, text, line, row, col)
+
+    @staticmethod
+    def Dash(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.Dash, text, line, row, col)
+
+    @staticmethod
+    def Underscore(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.Underscore, text, line, row, col)
+
+    @staticmethod
+    def Strike(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.Strike, text, line, row, col)
+
+    @staticmethod
+    def GreaterThan(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.GreaterThan, text, line, row, col)
+
+    @staticmethod
+    def OrderedItem1(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.OrderedItem1, text, line, row, col)
+
+    @staticmethod
+    def OrderedItem2(text: str, line: str, row: int, col: int) -> Token:
+        return Token(TokenType.OrderedItem2, text, line, row, col)
+
+    @staticmethod
+    def EOF(line: str = '', row: int = 1, col: int = 1) -> Token:
+        return Token(TokenType.EOF, '', line, row, col)
+
+    @staticmethod
+    def list_header_types() -> List[TokenType]:
+        return [
+            TokenType.H1,
+            TokenType.H2,
+            TokenType.H3,
+            TokenType.H4,
+            TokenType.H5,
+            TokenType.H6]
+
+    def __repr__(self) -> str:
+        return f"<{self.type}:{self.row}:{self.col}: {repr(self.text)}>"
+
+    def is_text(self) -> bool:
+        return self.type == TokenType.Text
+
+    def is_header(self) -> bool:
+        return self.type in Token.list_header_types()
+
+    def is_h1(self) -> bool:
+        return self.type == TokenType.H1
+
+    def is_h2(self) -> bool:
+        return self.type == TokenType.H2
+
+    def is_h3(self) -> bool:
+        return self.type == TokenType.H3
+
+    def is_h4(self) -> bool:
+        return self.type == TokenType.H4
+
+    def is_h5(self) -> bool:
+        return self.type == TokenType.H5
+
+    def is_h6(self) -> bool:
+        return self.type == TokenType.H6
+
+    def is_eof(self) -> bool:
+        return self.type == TokenType.EOF

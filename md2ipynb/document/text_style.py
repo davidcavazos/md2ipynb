@@ -14,3 +14,21 @@
 # KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+from enum import Enum
+
+
+class TextStyle(Enum):
+    h1 = 'h1'
+    h2 = 'h2'
+    h3 = 'h3'
+    h4 = 'h4'
+    h5 = 'h5'
+    h6 = 'h6'
+    subtitle1 = 'subtitle1'
+    subtitle2 = 'subtitle2'
+    body1 = 'body1'
+    body2 = 'body2'
+    button = 'button'
+    caption = 'caption'
+    overline = 'overline'

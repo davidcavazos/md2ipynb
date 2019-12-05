@@ -14,3 +14,27 @@
 # KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+import re
+from dataclasses import dataclass, field
+from typing import List
+
+from .block import Block
+
+_block_quote_re = re.compile(r' {0,3}> ?')
+
+
+@dataclass
+class BlockQuote(Block):
+    items: List[Block] = field(default_factory=list)
+
+    @staticmethod
+    def matches(line: str) -> bool:
+        return bool(_block_quote_re.match(line))
+
+    @staticmethod
+    def strip_delimiters(line: str) -> str:
+        m = _block_quote_re.match(line)
+        if not m:
+            return line
+        return line[m.end():]

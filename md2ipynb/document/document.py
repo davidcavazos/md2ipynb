@@ -14,3 +14,13 @@
 # KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+from dataclasses import dataclass, field
+from typing import Iterable
+
+from .block import Block
+
+
+@dataclass
+class Document:
+    blocks: Iterable[Block] = field(default_factory=list)

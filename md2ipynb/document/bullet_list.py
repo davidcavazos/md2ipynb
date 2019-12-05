@@ -14,3 +14,13 @@
 # KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+from dataclasses import dataclass
+from typing import List
+
+from .block import Block
+
+
+@dataclass
+class BulletList(Block):
+    items: List[Block]

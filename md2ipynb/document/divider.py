@@ -14,3 +14,18 @@
 # KIND, either express or implied. See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+import re
+from dataclasses import dataclass
+
+from .block import Block
+
+_divider_re = re.compile(r' {0,3}(?:-[- ]+|\*[* ]+|_[_ ]+)$')
+
+
+@dataclass
+class Divider(Block):
+    @staticmethod
+    def matches(line: str) -> bool:
+        # Make sure to have at least 3 non-blank characters.
+        return bool(_divider_re.match(line)) and len(line.replace(' ', '')) >= 3
