@@ -15,12 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from dataclasses import dataclass, field
-from typing import *
-
 from .block import Block
 
 
-@dataclass
-class Document:
-    blocks: List[Block] = field(default_factory=list)
+class List(Block):
+    pass

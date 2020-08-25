@@ -22,6 +22,13 @@ output notebook by default.
 
 # Hello World!
 
+*	 a
+     *	b
+
+*    a
+     * b
+	 * c
+
 This is a simple markdown page with GitHub code snippets.
 All this will be translated into a Jupyter notebook using the desired language.
 

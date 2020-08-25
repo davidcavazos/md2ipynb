@@ -15,12 +15,11 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from dataclasses import dataclass, field
-from typing import *
+# Based roughly on the GitHub Flavored Markdown Spec:
+#   https://github.github.com/gfm/
 
-from .block import Block
+import unittest
 
 
-@dataclass
-class Document:
-    blocks: List[Block] = field(default_factory=list)
+class MarkdownParserTest(unittest.TestCase):
+    pass

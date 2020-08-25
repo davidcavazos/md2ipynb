@@ -15,12 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from dataclasses import dataclass, field
-from typing import *
+# take(x: m<a>, quantifier: Quantifier): [a]
+# take(p: Parser<a>, quantifier: Quantifier): Parser<[a]>
 
-from .block import Block
+# let identifier: Parser<Text> ->
+#   for x in letter or char '_'
+#   for xs in (alphanum or char '_') .take (AtLeast 0)
+#   as Token(x ++ xs .join)
 
-
-@dataclass
-class Document:
-    blocks: List[Block] = field(default_factory=list)
+# let a: Integer.. =
+#   for x in 1.. .take (AtMost 3)
+#   for y in 2.. if y .is_even
+#   do (x, y)

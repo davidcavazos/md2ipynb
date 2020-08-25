@@ -15,12 +15,14 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 from .block import Block
+from .list import List as ListBlock
+from .list_item import ListItem
 
 
 @dataclass
-class BulletList(Block):
-    items: List[Block]
+class BulletList(ListBlock):
+    items: List[ListItem] = field(default_factory=list)

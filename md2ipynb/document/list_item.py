@@ -16,11 +16,11 @@
 # under the License.
 
 from dataclasses import dataclass, field
-from typing import *
+from typing import List
 
 from .block import Block
 
 
 @dataclass
-class Document:
-    blocks: List[Block] = field(default_factory=list)
+class ListItem(Block):
+    items: List[Block] = field(default_factory=list)
